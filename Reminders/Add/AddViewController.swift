@@ -65,9 +65,7 @@ class AddViewController: BaseViewController {
         guard let title = titleTextField.text, !title.isEmpty,
               let content = memoTextField.text,
               let date = deadlineTextField.text  else {
-//            print("제목 입력해주세요")
             view.showToast(message: "제목을 입력해주세요")
-            // "제목 입력해주세요" 토스트 메세지 띄우기
             return
         }
         // Data 생성

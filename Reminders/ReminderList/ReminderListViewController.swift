@@ -46,6 +46,14 @@ class ReminderListViewController: BaseViewController {
         reminderListTableView.dataSource = self
         reminderListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
     }
+    
+    private func deleteReminder(at indexPath: IndexPath) {
+        let reminder = reminderList[indexPath.row]
+        try! realm.write {
+            realm.delete(reminder)
+        }
+        reminderListTableView.deleteRows(at: [indexPath], with: .automatic)
+    }
 }
 
 extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -56,21 +64,20 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
         let data = reminderList[indexPath.row]
-        cell.configure(with: indexPath, delegate: self)
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
         cell.dateLabel.text = data.deadLineDate
+        cell.deleteAction = { [weak self] in
+            self?.deleteReminder(at: indexPath)
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteReminder(at: indexPath)
+        }
     }
 }
 
-extension ReminderListViewController: ListTableViewCellDelegate {
-    func didToggleCheckButton(at indexPath: IndexPath) {
-        try! realm.write {
-            realm.delete(reminderList[indexPath.row])
-        }
-        reminderListTableView.deleteRows(at: [indexPath], with: .automatic)
-        reminderListTableView.reloadData()
-    }
-}
 

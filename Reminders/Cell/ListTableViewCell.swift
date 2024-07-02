@@ -8,20 +8,17 @@
 import UIKit
 import SnapKit
 
-protocol ListTableViewCellDelegate: AnyObject {
-    func didToggleCheckButton(at indexPath: IndexPath)
-}
-
 class ListTableViewCell: BaseTableViewCell {
     static let id = "ListTableViewCell"
     
-    weak var delegate: ListTableViewCellDelegate?
     var indexPath: IndexPath!
     
     let checkBoxButton = UIButton()
     let titleLabel = UILabel()
     let memoLabel = UILabel()
     let dateLabel = UILabel()
+    
+    var deleteAction: (() -> Void)?
     
     func testUI() {
         titleLabel.text = "title label"
@@ -80,13 +77,6 @@ class ListTableViewCell: BaseTableViewCell {
         checkBoxButton.isSelected.toggle()
         if checkBoxButton.isSelected {
             print("CheckBox is checked.")
-            delegate?.didToggleCheckButton(at: indexPath)
-            
         }
-    }
-    
-    func configure(with indexPath: IndexPath, delegate: ListTableViewCellDelegate) {
-        self.indexPath = indexPath
-        self.delegate = delegate
     }
 }
