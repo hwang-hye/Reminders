@@ -9,23 +9,31 @@
 /* Begin PBXBuildFile section */
 		2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49B2C34336E009A81B5 /* AppDelegate.swift */; };
 		2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49D2C34336E009A81B5 /* SceneDelegate.swift */; };
-		2775E4A02C34336E009A81B5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49F2C34336E009A81B5 /* ViewController.swift */; };
+		2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49F2C34336E009A81B5 /* AddViewController.swift */; };
 		2775E4A52C34336F009A81B5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2775E4A42C34336F009A81B5 /* Assets.xcassets */; };
 		2775E4A82C34336F009A81B5 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 2775E4A72C34336F009A81B5 /* Base */; };
 		2775E4B02C3437B7009A81B5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2775E4AF2C3437B7009A81B5 /* .gitignore */; };
 		2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4B22C3439F4009A81B5 /* BaseViewController.swift */; };
+		2775E4B82C343F34009A81B5 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2775E4B72C343F34009A81B5 /* RealmSwift */; };
+		2775E4BB2C343F69009A81B5 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2775E4BA2C343F69009A81B5 /* SnapKit */; };
+		2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4BD2C345209009A81B5 /* ReminderListViewController.swift */; };
+		2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */; };
+		2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2775E4982C34336E009A81B5 /* Reminders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2775E49B2C34336E009A81B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2775E49D2C34336E009A81B5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2775E49F2C34336E009A81B5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2775E49F2C34336E009A81B5 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		2775E4A42C34336F009A81B5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2775E4A72C34336F009A81B5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2775E4A92C34336F009A81B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2775E4AF2C3437B7009A81B5 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		2775E4B22C3439F4009A81B5 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		2775E4BD2C345209009A81B5 /* ReminderListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewController.swift; sourceTree = "<group>"; };
+		2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2775E4B82C343F34009A81B5 /* RealmSwift in Frameworks */,
+				2775E4BB2C343F69009A81B5 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,10 +69,12 @@
 		2775E49A2C34336E009A81B5 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
+				2775E4BF2C3454C9009A81B5 /* Cell */,
+				2775E4B52C343C58009A81B5 /* Add */,
+				2775E4BC2C3451E3009A81B5 /* ReminderList */,
 				2775E4B12C3439DB009A81B5 /* Base */,
 				2775E49B2C34336E009A81B5 /* AppDelegate.swift */,
 				2775E49D2C34336E009A81B5 /* SceneDelegate.swift */,
-				2775E49F2C34336E009A81B5 /* ViewController.swift */,
 				2775E4A42C34336F009A81B5 /* Assets.xcassets */,
 				2775E4A62C34336F009A81B5 /* LaunchScreen.storyboard */,
 				2775E4A92C34336F009A81B5 /* Info.plist */,
@@ -74,8 +86,33 @@
 			isa = PBXGroup;
 			children = (
 				2775E4B22C3439F4009A81B5 /* BaseViewController.swift */,
+				2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		2775E4B52C343C58009A81B5 /* Add */ = {
+			isa = PBXGroup;
+			children = (
+				2775E49F2C34336E009A81B5 /* AddViewController.swift */,
+			);
+			path = Add;
+			sourceTree = "<group>";
+		};
+		2775E4BC2C3451E3009A81B5 /* ReminderList */ = {
+			isa = PBXGroup;
+			children = (
+				2775E4BD2C345209009A81B5 /* ReminderListViewController.swift */,
+			);
+			path = ReminderList;
+			sourceTree = "<group>";
+		};
+		2775E4BF2C3454C9009A81B5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -94,6 +131,10 @@
 			dependencies = (
 			);
 			name = Reminders;
+			packageProductDependencies = (
+				2775E4B72C343F34009A81B5 /* RealmSwift */,
+				2775E4BA2C343F69009A81B5 /* SnapKit */,
+			);
 			productName = Reminders;
 			productReference = 2775E4982C34336E009A81B5 /* Reminders.app */;
 			productType = "com.apple.product-type.application";
@@ -122,6 +163,10 @@
 				Base,
 			);
 			mainGroup = 2775E48F2C34336E009A81B5;
+			packageReferences = (
+				2775E4B62C343F34009A81B5 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				2775E4B92C343F68009A81B5 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 2775E4992C34336E009A81B5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -149,10 +194,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2775E4A02C34336E009A81B5 /* ViewController.swift in Sources */,
+				2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */,
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
 				2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */,
+				2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */,
+				2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */,
 				2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */,
+				2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +425,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2775E4B62C343F34009A81B5 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.52.1;
+			};
+		};
+		2775E4B92C343F68009A81B5 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2775E4B72C343F34009A81B5 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2775E4B62C343F34009A81B5 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		2775E4BA2C343F69009A81B5 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2775E4B92C343F68009A81B5 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2775E4902C34336E009A81B5 /* Project object */;
 }
