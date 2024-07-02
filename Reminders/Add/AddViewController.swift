@@ -13,7 +13,7 @@ class AddViewController: BaseViewController {
     let titleTextField = UITextField()
     let memoTextField = UITextField()
     let deadlineTextField = UITextField()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "새로운 할 일"
@@ -32,7 +32,7 @@ class AddViewController: BaseViewController {
         deadlineTextField.backgroundColor = .systemGray4
         
         let addButton = UIBarButtonItem(title: " 추가", style: .plain, target: self, action: #selector(addButtonClicked))
-                navigationItem.rightBarButtonItem = addButton
+        navigationItem.rightBarButtonItem = addButton
         
         titleTextField.placeholder = "제목"
         memoTextField.placeholder = "메모"
@@ -59,6 +59,26 @@ class AddViewController: BaseViewController {
     
     @objc func addButtonClicked() {
         print(#function)
+        // Realm 위치 찾기
+        let realm = try! Realm()
+        
+        guard let title = titleTextField.text, !title.isEmpty,
+              let content = memoTextField.text,
+              let date = deadlineTextField.text  else {
+            print("제목 입력해주세요")
+            return
+        }
+        // Data 생성
+        let data = ReminderListTable(title: title, content: content, deadLineDate: date)
+        // Realm에 생성된 Record 추가
+        try! realm.write {
+            realm.add(data)
+            print("Realm Create Succeed")
+        }
+        titleTextField.text = ""
+        memoTextField.text = ""
+        deadlineTextField.text = ""
+        
         let vc = ReminderListViewController()
         navigationController?.pushViewController(vc, animated: true)
     }

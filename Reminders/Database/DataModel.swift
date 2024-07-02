@@ -12,9 +12,9 @@ class ReminderListTable: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(indexed: true) var title: String
     @Persisted var content: String?
-    @Persisted var deadLineDate: Date?
+    @Persisted var deadLineDate: String?
     
-    convenience init(title: String, content: String?, deadLineDate: Date?) {
+    convenience init(title: String, content: String?, deadLineDate: String?) {
         self.init()
         self.title = title
         self.content = content
