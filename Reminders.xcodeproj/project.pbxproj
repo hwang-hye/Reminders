@@ -20,6 +20,7 @@
 		2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */; };
 		2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */; };
 		2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C52C345A93009A81B5 /* DataModel.swift */; };
+		2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4CB2C361610009A81B5 /* DateViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		2775E4C52C345A93009A81B5 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		2775E4CB2C361610009A81B5 /* DateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				2775E4BF2C3454C9009A81B5 /* Cell */,
 				2775E4B52C343C58009A81B5 /* Add */,
 				2775E4BC2C3451E3009A81B5 /* ReminderList */,
+				2775E4CA2C361604009A81B5 /* Date */,
 				2775E4B12C3439DB009A81B5 /* Base */,
 				2775E49B2C34336E009A81B5 /* AppDelegate.swift */,
 				2775E49D2C34336E009A81B5 /* SceneDelegate.swift */,
@@ -124,6 +127,14 @@
 				2775E4C52C345A93009A81B5 /* DataModel.swift */,
 			);
 			path = Database;
+			sourceTree = "<group>";
+		};
+		2775E4CA2C361604009A81B5 /* Date */ = {
+			isa = PBXGroup;
+			children = (
+				2775E4CB2C361610009A81B5 /* DateViewController.swift */,
+			);
+			path = Date;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +223,7 @@
 				2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */,
 				2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */,
 				2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */,
+				2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */,
 				2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
