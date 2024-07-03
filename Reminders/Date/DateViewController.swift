@@ -20,11 +20,6 @@ class DateViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        configureHierarchy()
-        configureLayout()
-        configureView()
-        
         selectButton.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
     }
     

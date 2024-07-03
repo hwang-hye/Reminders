@@ -13,6 +13,7 @@ class AddViewController: BaseViewController {
     let titleTextField = UITextField()
     let memoTextField = UITextField()
     let dateTextField = UITextField()
+    let tagTextField = UITextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,20 +27,23 @@ class AddViewController: BaseViewController {
         view.addSubview(titleTextField)
         view.addSubview(memoTextField)
         view.addSubview(dateTextField)
+        view.addSubview(tagTextField)
     }
     
     override func configureView() {
         super.configureView()
-        titleTextField.backgroundColor = .darkGray
-        memoTextField.backgroundColor = .lightGray
+        titleTextField.backgroundColor = .systemGray4
+        memoTextField.backgroundColor = .systemGray4
         dateTextField.backgroundColor = .systemGray4
-        
+        tagTextField.backgroundColor = .systemGray4
+    
         let addButton = UIBarButtonItem(title: " 추가", style: .plain, target: self, action: #selector(addButtonClicked))
         navigationItem.rightBarButtonItem = addButton
         
         titleTextField.placeholder = "제목"
         memoTextField.placeholder = "메모"
         dateTextField.placeholder = "마감일"
+        tagTextField.placeholder = "태그"
     }
     
     override func configureLayout() {
@@ -55,6 +59,11 @@ class AddViewController: BaseViewController {
         }
         dateTextField.snp.makeConstraints { make in
             make.top.equalTo(memoTextField.snp.bottom).offset(20)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(48)
+        }
+        tagTextField.snp.makeConstraints { make in
+            make.top.equalTo(dateTextField.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(48)
         }
