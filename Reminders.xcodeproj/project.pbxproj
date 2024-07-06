@@ -24,6 +24,7 @@
 		2775E4D52C38214C009A81B5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D42C38214C009A81B5 /* MainViewController.swift */; };
 		2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */; };
 		2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */; };
+		2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		2775E4D42C38214C009A81B5 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
+		2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */,
+				2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */,
 				2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */,
 			);
 			path = Cell;
@@ -234,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */,
+				2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */,
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
 				2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */,
 				2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */,

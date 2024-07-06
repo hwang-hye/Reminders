@@ -45,12 +45,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
     }
     override func configureView() {
         cellView.backgroundColor = .white.withAlphaComponent(0.1)
-//        cellIcon.backgroundColor = .blue
-//        statusLabel.backgroundColor = .yellow
-//        countLabel.backgroundColor = .black
-        
         cellView.layer.cornerRadius = 12
-        cellIcon.image = UIImage(systemName: "checkmark.circle.fill")
         statusLabel.text = "text"
         statusLabel.textColor = .gray
         statusLabel.font = .systemFont(ofSize: 14, weight: .regular)

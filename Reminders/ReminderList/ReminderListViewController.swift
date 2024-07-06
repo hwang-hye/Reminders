@@ -41,6 +41,7 @@ class ReminderListViewController: BaseViewController {
     
     override func configureView() {
         super.configureView()
+        
         reminderListTableView.rowHeight = 120
         reminderListTableView.delegate = self
         reminderListTableView.dataSource = self

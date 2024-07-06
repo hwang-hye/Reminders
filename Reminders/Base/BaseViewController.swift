@@ -15,7 +15,7 @@ class BaseViewController: UIViewController {
         configureLayout()
     }
     func configureHierarchy() { }
-    func configureView() { 
+    func configureView() {
         view.backgroundColor = .black
     }
     func configureLayout() { }
@@ -50,5 +50,18 @@ extension UIView {
                 toastLabel.removeFromSuperview()
             })
         })
+    }
+}
+
+extension UITextField {
+    @IBInspectable var placeholderColor: UIColor {
+        get {
+            return attributedPlaceholder?.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? UIColor ?? .clear
+        }
+        set {
+            guard let attributedPlaceholder = attributedPlaceholder else { return }
+            let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: newValue]
+            self.attributedPlaceholder = NSAttributedString(string: attributedPlaceholder.string, attributes: attributes)
+        }
     }
 }

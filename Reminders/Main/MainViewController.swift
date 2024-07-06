@@ -91,12 +91,7 @@ class MainViewController: BaseViewController {
         }
     }
     
-    override func configureView() {
-//        titleLabel.backgroundColor = .darkGray
-//        collectiocView.backgroundColor = .darkGray
-//        addTodoButton.backgroundColor = .systemGray
-//        addListButton.backgroundColor = .lightGray
-        
+    override func configureView() {        
         titleLabel.text = "전체"
         titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
         titleLabel.textColor = .darkGray
@@ -106,9 +101,16 @@ class MainViewController: BaseViewController {
         addTodoButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         addTodoButton.setTitle(" 새로운 할 일", for: .normal)
         addTodoButton.setTitleColor(.systemBlue, for: .normal)
+        addTodoButton.addTarget(self, action: #selector(addTodoButtonClicked), for: .touchUpInside)
+        
         addListButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         addListButton.setTitle(" 목록 추가", for: .normal)
         addListButton.setTitleColor(.systemBlue, for: .normal)
+    }
+    
+    @objc func addTodoButtonClicked() {
+        let vc = AddViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
