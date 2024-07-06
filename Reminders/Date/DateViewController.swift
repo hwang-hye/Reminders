@@ -39,6 +39,7 @@ class DateViewController: BaseViewController {
     }
     
     override func configureView() {
+        super.configureView()
         datePicker.datePickerMode = .date
         selectButton.setTitle("Select Date", for: .normal)
     }

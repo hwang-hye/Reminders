@@ -21,6 +21,9 @@
 		2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */; };
 		2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4C52C345A93009A81B5 /* DataModel.swift */; };
 		2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4CB2C361610009A81B5 /* DateViewController.swift */; };
+		2775E4D52C38214C009A81B5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D42C38214C009A81B5 /* MainViewController.swift */; };
+		2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */; };
+		2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +41,9 @@
 		2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
 		2775E4C52C345A93009A81B5 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		2775E4CB2C361610009A81B5 /* DateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewController.swift; sourceTree = "<group>"; };
+		2775E4D42C38214C009A81B5 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +81,7 @@
 			children = (
 				2775E4C42C345A72009A81B5 /* Database */,
 				2775E4BF2C3454C9009A81B5 /* Cell */,
+				2775E4D32C38204A009A81B5 /* Main */,
 				2775E4B52C343C58009A81B5 /* Add */,
 				2775E4BC2C3451E3009A81B5 /* ReminderList */,
 				2775E4CA2C361604009A81B5 /* Date */,
@@ -93,6 +100,7 @@
 			children = (
 				2775E4B22C3439F4009A81B5 /* BaseViewController.swift */,
 				2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */,
+				2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -117,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				2775E4C02C3454DB009A81B5 /* ListTableViewCell.swift */,
+				2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -135,6 +144,14 @@
 				2775E4CB2C361610009A81B5 /* DateViewController.swift */,
 			);
 			path = Date;
+			sourceTree = "<group>";
+		};
+		2775E4D32C38204A009A81B5 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				2775E4D42C38214C009A81B5 /* MainViewController.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,11 +237,14 @@
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
 				2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */,
 				2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */,
+				2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */,
 				2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */,
 				2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */,
+				2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */,
 				2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */,
 				2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */,
 				2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */,
+				2775E4D52C38214C009A81B5 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
