@@ -128,4 +128,25 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.statusLabel.text = statusTexts[indexPath.item]
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        switch indexPath.item {
+        case 0:
+            print("오늘")
+        case 1:
+            print("예정")
+        case 2:
+            print("전체")
+            let allListVC = ReminderListViewController()
+            navigationController?.pushViewController(allListVC, animated: true)
+        case 3:
+            print("깃발 표시")
+        case 4:
+            print("완료됨")
+        default:
+            break
+        }
+        
+    }
 }

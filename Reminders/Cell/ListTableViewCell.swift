@@ -18,8 +18,17 @@ class ListTableViewCell: BaseTableViewCell {
     let titleLabel = UILabel()
     let memoLabel = UILabel()
     let dateLabel = UILabel()
+    let tagLabel = UILabel()
     
     var deleteAction: (() -> Void)?
+    
+    override func configureHierarchy() {
+        contentView.addSubview(photoImage)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(memoLabel)
+        contentView.addSubview(dateLabel)
+        contentView.addSubview(tagLabel)
+    }
     
     override func configureLayout() {
 //        checkBoxButton.snp.makeConstraints { make in
@@ -28,7 +37,7 @@ class ListTableViewCell: BaseTableViewCell {
 //        }
         photoImage.snp.makeConstraints { make in
             make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(16)
-            make.width.equalTo(80)
+            make.width.equalTo(100)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -40,27 +49,35 @@ class ListTableViewCell: BaseTableViewCell {
         memoLabel.snp.makeConstraints { make in
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(16)
             make.leading.equalTo(photoImage.snp.trailing).offset(8)
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.height.equalTo(18)
         }
         
         dateLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(16)
+            make.leading.equalTo(photoImage.snp.trailing).offset(8)
+            make.top.equalTo(memoLabel.snp.bottom).offset(8)
+        }
+        
+        tagLabel.snp.makeConstraints { make in
             make.trailing.bottom.equalTo(contentView.safeAreaLayoutGuide).inset(16)
             make.leading.equalTo(photoImage.snp.trailing).offset(8)
-            make.top.equalTo(memoLabel.snp.bottom)
+            make.top.equalTo(dateLabel.snp.bottom)
         }
     }
     
-    override func configureHierarchy() {
-        contentView.addSubview(photoImage)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(memoLabel)
-        contentView.addSubview(dateLabel)
-    }
+
     
     override func configureView() {
+        contentView.backgroundColor = .backgroundGray
+        titleLabel.textColor = .white
+        memoLabel.textColor = .white
+        dateLabel.textColor = .white
+        tagLabel.textColor = .white
         memoLabel.numberOfLines = 0
-//        setupCheckBoxButton()
+        
+        
+        //        setupCheckBoxButton()
         
         
     }

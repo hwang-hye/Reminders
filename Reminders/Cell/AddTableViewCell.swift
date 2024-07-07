@@ -26,7 +26,7 @@ class AddTableViewCell: BaseTableViewCell {
     override func configureLayout() {
         cellBackgroundView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            make.height.equalTo(44)
+            make.height.equalTo(42)
         }
         menuTitleLabel.snp.makeConstraints { make in
             make.leading.verticalEdges.equalTo(cellBackgroundView.safeAreaLayoutGuide).inset(14)

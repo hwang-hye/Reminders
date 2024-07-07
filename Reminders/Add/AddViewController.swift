@@ -30,8 +30,13 @@ class AddViewController: BaseViewController {
     var selectedPriority: String?
     var selectedImage: UIImage?
     
+    let repository = DataRepository()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let realm = try! Realm()
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
         self.title = "새로운 할 일"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
@@ -50,8 +55,27 @@ class AddViewController: BaseViewController {
     @objc func addButtonClicked() {
         print("추가 버튼")
         print(#function)
-        // Realm 위치 찾기ehe
-        let realm = try! Realm()
+        
+        guard let title = titleTextField.text, !title.isEmpty,
+              let content = memoTextField.text else {
+            view.showToast(message: "제목을 입력해주세요")
+            return
+        }
+        // 각 셀에 담긴 데이터
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd (E)"
+        let dateString = selectedDate != nil ? dateFormatter.string(from: selectedDate!) : nil
+        
+        let tag = selectedTag
+        let priority = selectedPriority
+        
+        let data = ReminderTable(title: title, content: content, date: dateString, tag: tag, priority: priority)
+        repository.createItem(data)
+        
+        if let image = photoImageView.image {
+            saveImageToDocument(image: image, filename: "\(data.id)")
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     override func configureHierarchy() {
@@ -66,7 +90,7 @@ class AddViewController: BaseViewController {
     override func configureLayout() {
         textFieldView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(14)
             make.height.equalTo(180)
         }
         titleTextField.snp.makeConstraints { make in
@@ -86,7 +110,7 @@ class AddViewController: BaseViewController {
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(textFieldView.snp.bottom).offset(14)
+            make.top.equalTo(textFieldView.snp.bottom).offset(18)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(14)
             make.height.equalTo(230)
         }
@@ -99,7 +123,7 @@ class AddViewController: BaseViewController {
     
     override func configureView() {
         super.configureView()
-        view.backgroundColor = UIColor(named: "BackgroundGray")
+        view.backgroundColor = .backgroundGray
         
         textFieldView.backgroundColor = .white.withAlphaComponent(0.08)
         textFieldView.layer.cornerRadius = 12
@@ -164,9 +188,9 @@ extension AddViewController: PHPickerViewControllerDelegate {
                    itemProvider.canLoadObject(ofClass: UIImage.self) {
                     
                     DispatchQueue.main.async {
-                        self.selectedImage = image  // 선택된 이미지를 프로퍼티에 저장
+                        self.selectedImage = image
                         self.photoImageView.image = self.selectedImage
-                        self.tableView.reloadData()  // 테이블 뷰를 리로드하여 변경 사항을 반영
+                        self.tableView.reloadData()
                     }
                 }
             }

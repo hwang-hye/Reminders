@@ -12,13 +12,12 @@ import SnapKit
 class ReminderListViewController: BaseViewController {
     
     let reminderListTableView = UITableView()
-    var reminderList: Results<ReminderListTable>!
+    var reminderList: Results<ReminderTable>!
     let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        reminderList = realm.objects(ReminderListTable.self).sorted(byKeyPath: "title", ascending: false)
-        print(realm.configuration.fileURL)
+        reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
         // 필터 기능 처리
     }
     
@@ -40,8 +39,8 @@ class ReminderListViewController: BaseViewController {
     
     override func configureView() {
         super.configureView()
-        
-        reminderListTableView.rowHeight = 120
+        reminderListTableView.backgroundColor = .black
+        // reminderListTableView.rowHeight = 130
         reminderListTableView.delegate = self
         reminderListTableView.dataSource = self
         reminderListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
@@ -64,9 +63,12 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
         let data = reminderList[indexPath.row]
+        cell.selectionStyle = .none
+        cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
-        cell.dateLabel.text = data.deadLineDate
+        cell.dateLabel.text = data.date
+        cell.tagLabel.text = data.tag
         cell.deleteAction = { [weak self] in
             self?.deleteReminder(at: indexPath)
         }
@@ -77,6 +79,20 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         if editingStyle == .delete {
             deleteReminder(at: indexPath)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear // 간격을 위한 빈 뷰
+        return view
     }
 }
 

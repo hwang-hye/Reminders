@@ -27,6 +27,8 @@
 		2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */; };
 		2775E4DE2C3A79CE009A81B5 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DD2C3A79CE009A81B5 /* TagViewController.swift */; };
 		2775E4E02C3A820C009A81B5 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DF2C3A820C009A81B5 /* PriorityViewController.swift */; };
+		2775E4E42C3AB02F009A81B5 /* DataRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4E32C3AB02F009A81B5 /* DataRepository.swift */; };
+		2775E4E62C3AC055009A81B5 /* FileManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4E52C3AC055009A81B5 /* FileManager+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
 		2775E4DD2C3A79CE009A81B5 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		2775E4DF2C3A820C009A81B5 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
+		2775E4E32C3AB02F009A81B5 /* DataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRepository.swift; sourceTree = "<group>"; };
+		2775E4E52C3AC055009A81B5 /* FileManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,7 @@
 				2775E4B22C3439F4009A81B5 /* BaseViewController.swift */,
 				2775E4C22C34550E009A81B5 /* BaseTableViewCell.swift */,
 				2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */,
+				2775E4E52C3AC055009A81B5 /* FileManager+.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				2775E4C52C345A93009A81B5 /* DataModel.swift */,
+				2775E4E32C3AB02F009A81B5 /* DataRepository.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -237,12 +243,14 @@
 				2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */,
 				2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */,
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
+				2775E4E62C3AC055009A81B5 /* FileManager+.swift in Sources */,
 				2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */,
 				2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */,
 				2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */,
 				2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */,
 				2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */,
 				2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */,
+				2775E4E42C3AB02F009A81B5 /* DataRepository.swift in Sources */,
 				2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */,
 				2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */,
 				2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */,
