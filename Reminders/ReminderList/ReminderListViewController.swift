@@ -9,7 +9,6 @@ import UIKit
 import RealmSwift
 import SnapKit
 
-
 class ReminderListViewController: BaseViewController {
     
     let reminderListTableView = UITableView()

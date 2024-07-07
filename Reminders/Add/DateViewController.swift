@@ -8,19 +8,19 @@
 import UIKit
 import SnapKit
 
-protocol DateViewControllerDelegate: AnyObject {
+protocol DatePickerViewControllerDelegate: AnyObject {
     func didSelectDate(_ date: Date)
 }
 
 class DateViewController: BaseViewController {
     
-    weak var delegate: DateViewControllerDelegate?
+    weak var delegate: DatePickerViewControllerDelegate?
     let datePicker = UIDatePicker()
-    let selectButton = UIButton(type: .system)
+    let selectButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        selectButton.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
+        selectButton.addTarget(self, action: #selector(selectButtonClicked), for: .touchUpInside)
     }
     
     override func configureHierarchy() {
@@ -40,11 +40,14 @@ class DateViewController: BaseViewController {
     
     override func configureView() {
         super.configureView()
+        view.backgroundColor = .backgroundGray
         datePicker.datePickerMode = .date
-        selectButton.setTitle("Select Date", for: .normal)
+        datePicker.backgroundColor = .darkGray.withAlphaComponent(0.3)
+        selectButton.setTitle("날짜 선택 완료", for: .normal)
+        selectButton.setTitleColor(.systemBlue, for: .normal)
     }
     
-    @objc func selectButtonTapped() {
+    @objc func selectButtonClicked() {
         let selectedDate = datePicker.date
         delegate?.didSelectDate(selectedDate)
         navigationController?.popViewController(animated: true)

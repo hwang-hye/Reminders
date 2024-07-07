@@ -25,6 +25,8 @@
 		2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */; };
 		2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */; };
 		2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */; };
+		2775E4DE2C3A79CE009A81B5 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DD2C3A79CE009A81B5 /* TagViewController.swift */; };
+		2775E4E02C3A820C009A81B5 /* PriorityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E4DF2C3A820C009A81B5 /* PriorityViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		2775E4D62C382219009A81B5 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		2775E4D82C382437009A81B5 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 		2775E4DA2C393E99009A81B5 /* AddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
+		2775E4DD2C3A79CE009A81B5 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
+		2775E4DF2C3A820C009A81B5 /* PriorityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +90,6 @@
 				2775E4D32C38204A009A81B5 /* Main */,
 				2775E4B52C343C58009A81B5 /* Add */,
 				2775E4BC2C3451E3009A81B5 /* ReminderList */,
-				2775E4CA2C361604009A81B5 /* Date */,
 				2775E4B12C3439DB009A81B5 /* Base */,
 				2775E49B2C34336E009A81B5 /* AppDelegate.swift */,
 				2775E49D2C34336E009A81B5 /* SceneDelegate.swift */,
@@ -111,6 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				2775E49F2C34336E009A81B5 /* AddViewController.swift */,
+				2775E4CB2C361610009A81B5 /* DateViewController.swift */,
+				2775E4DD2C3A79CE009A81B5 /* TagViewController.swift */,
+				2775E4DF2C3A820C009A81B5 /* PriorityViewController.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -139,14 +145,6 @@
 				2775E4C52C345A93009A81B5 /* DataModel.swift */,
 			);
 			path = Database;
-			sourceTree = "<group>";
-		};
-		2775E4CA2C361604009A81B5 /* Date */ = {
-			isa = PBXGroup;
-			children = (
-				2775E4CB2C361610009A81B5 /* DateViewController.swift */,
-			);
-			path = Date;
 			sourceTree = "<group>";
 		};
 		2775E4D32C38204A009A81B5 /* Main */ = {
@@ -249,6 +247,8 @@
 				2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */,
 				2775E4C12C3454DB009A81B5 /* ListTableViewCell.swift in Sources */,
 				2775E4D52C38214C009A81B5 /* MainViewController.swift in Sources */,
+				2775E4DE2C3A79CE009A81B5 /* TagViewController.swift in Sources */,
+				2775E4E02C3A820C009A81B5 /* PriorityViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

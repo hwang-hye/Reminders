@@ -44,7 +44,7 @@ class MainCollectionViewCell: BaseCollectionViewCell {
         
     }
     override func configureView() {
-        cellView.backgroundColor = .white.withAlphaComponent(0.1)
+        cellView.backgroundColor = .white.withAlphaComponent(0.12)
         cellView.layer.cornerRadius = 12
         statusLabel.text = "text"
         statusLabel.textColor = .gray

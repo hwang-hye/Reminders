@@ -8,16 +8,15 @@
 import UIKit
 import RealmSwift
 import SnapKit
+import PhotosUI
 
 class AddViewController: BaseViewController {
     let textFieldView = UIView()
     let textFieldLine = UIView()
     let titleTextField = UITextField()
     let memoTextField = UITextField()
-    //    let dateTextField = UITextField()
-    //    let tagTextField = UITextField()
-    
     let tableView = UITableView()
+    let photoImageView = UIImageView()
     
     let menuTexts: [String] = [
         "마감일",
@@ -26,12 +25,33 @@ class AddViewController: BaseViewController {
         "이미지 추가"
     ]
     
+    var selectedDate: Date?
+    var selectedTag: String?
+    var selectedPriority: String?
+    var selectedImage: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "새로운 할 일"
+        self.title = "새로운 할 일"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
-        //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dateTextFieldClicked))
-        //        dateTextField.addGestureRecognizer(tapGesture)
+        let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelButtonClicked))
+        navigationItem.leftBarButtonItem = cancelButton
+        
+        let addButton = UIBarButtonItem(title: "추가", style: .plain, target: self, action: #selector(addButtonClicked))
+        navigationItem.rightBarButtonItem = addButton
+    }
+    
+    @objc func cancelButtonClicked() {
+        print("취소 버튼")
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func addButtonClicked() {
+        print("추가 버튼")
+        print(#function)
+        // Realm 위치 찾기ehe
+        let realm = try! Realm()
     }
     
     override func configureHierarchy() {
@@ -40,51 +60,12 @@ class AddViewController: BaseViewController {
         textFieldView.addSubview(textFieldLine)
         textFieldView.addSubview(memoTextField)
         view.addSubview(tableView)
-        //        view.addSubview(dateTextField)
-        //        view.addSubview(tagTextField)
-    }
-    
-    override func configureView() {
-        super.configureView()
-        
-        textFieldView.backgroundColor = .white.withAlphaComponent(0.2)
-        textFieldView.layer.cornerRadius = 12
-        
-        titleTextField.placeholder = "제목"
-        titleTextField.placeholderColor = .darkGray
-        
-        textFieldLine.layer.borderWidth = 1
-        textFieldLine.backgroundColor = .darkGray
-        
-        memoTextField.placeholder = "메모"
-        memoTextField.placeholderColor = .darkGray
-        memoTextField.textAlignment = .natural
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(AddTableViewCell.self, forCellReuseIdentifier: AddTableViewCell.id)
-        tableView.backgroundColor = .clear
-//        tableView.separatorStyle = .none
-        
-        
-        //        titleTextField.backgroundColor = .systemGray4
-        //        memoTextField.backgroundColor = .systemGray4
-        //        dateTextField.backgroundColor = .systemGray4
-        //        tagTextField.backgroundColor = .systemGray4
-        
-        //        let addButton = UIBarButtonItem(title: " 추가", style: .plain, target: self, action: #selector(addButtonClicked))
-        //        navigationItem.rightBarButtonItem = addButton
-        
-        
-        
-        //
-        //        dateTextField.placeholder = "마감일"
-        //        tagTextField.placeholder = "태그"
+        view.addSubview(photoImageView)
     }
     
     override func configureLayout() {
         textFieldView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.height.equalTo(180)
         }
@@ -107,58 +88,89 @@ class AddViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(textFieldView.snp.bottom).offset(14)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(14)
-            make.height.equalTo(300)
+            make.height.equalTo(230)
         }
-        //        dateTextField.snp.makeConstraints { make in
-        //            make.top.equalTo(memoTextField.snp.bottom).offset(20)
-        //            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
-        //            make.height.equalTo(48)
-        //        }
-        //        tagTextField.snp.makeConstraints { make in
-        //            make.top.equalTo(dateTextField.snp.bottom).offset(20)
-        //            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
-        //            make.height.equalTo(48)
-        //        }
+        photoImageView.snp.makeConstraints { make in
+            make.top.equalTo(tableView.snp.bottom).offset(10)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(14)
+            make.height.equalTo(200)
+        }
     }
     
-    @objc func dateTextFieldClicked() {
-        let vc = DateViewController()
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
+    override func configureView() {
+        super.configureView()
+        view.backgroundColor = UIColor(named: "BackgroundGray")
+        
+        textFieldView.backgroundColor = .white.withAlphaComponent(0.08)
+        textFieldView.layer.cornerRadius = 12
+        
+        titleTextField.placeholder = "제목"
+        titleTextField.placeholderColor = .darkGray
+        titleTextField.textColor = .white
+        
+        textFieldLine.layer.borderWidth = 1
+        textFieldLine.layer.borderColor = UIColor.darkGray.cgColor
+        
+        memoTextField.placeholder = "메모"
+        memoTextField.placeholderColor = .darkGray
+        memoTextField.textAlignment = .natural
+        memoTextField.textColor = .white
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(AddTableViewCell.self, forCellReuseIdentifier: AddTableViewCell.id)
+        tableView.backgroundColor = .clear
+        
+        photoImageView.contentMode = .scaleAspectFit
     }
-    
-    //    @objc func addButtonClicked() {
-    //        print(#function)
-    //        // Realm 위치 찾기
-    //        let realm = try! Realm()
-    //
-    //        guard let title = titleTextField.text, !title.isEmpty,
-    //              let content = memoTextField.text,
-    //              let date = dateTextField.text  else {
-    //            view.showToast(message: "제목을 입력해주세요")
-    //            return
-    //        }
-    //        // Data 생성
-    //        let data = ReminderListTable(title: title, content: content, deadLineDate: date)
-    //        // Realm에 생성된 Record 추가
-    //        try! realm.write {
-    //            realm.add(data)
-    //            print("Realm Create Succeed")
-    //        }
-    //        titleTextField.text = ""
-    //        memoTextField.text = ""
-    //        dateTextField.text = ""
-    //
-    //        let vc = ReminderListViewController()
-    //        navigationController?.pushViewController(vc, animated: true)
-    //    }
 }
 
-extension AddViewController: DateViewControllerDelegate {
+extension AddViewController: DatePickerViewControllerDelegate {
     func didSelectDate(_ date: Date) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM.dd (EEEE)"
-        //        dateTextField.text = formatter.string(from: date)
+        selectedDate = date
+        tableView.reloadData()
+    }
+}
+
+extension AddViewController: TagViewControllerDelegate {
+    func didSelectTag(_ tag: String) {
+        selectedTag = tag
+        tableView.reloadData()
+    }
+}
+
+extension AddViewController: PriorityViewControllerDelegate {
+    func didSelectPriority(_ priority: String) {
+        selectedPriority = priority
+        tableView.reloadData()
+    }
+}
+extension AddViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        print(#function)
+        
+        picker.dismiss(animated: true)
+        
+        guard let itemProvider = results.first?.itemProvider else {
+            return
+        }
+        if itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let self = self, let image = image as? UIImage else {
+                    return
+                }
+                
+                if let itemProvider = results.first?.itemProvider,
+                   itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    
+                    DispatchQueue.main.async {
+                        self.selectedImage = image  // 선택된 이미지를 프로퍼티에 저장
+                        self.photoImageView.image = self.selectedImage
+                        self.tableView.reloadData()  // 테이블 뷰를 리로드하여 변경 사항을 반영
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -177,7 +189,71 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         cell.menuTitleLabel.font = .systemFont(ofSize: 14, weight: .regular)
         cell.menuTitleLabel.textColor = .white
         cell.menuIcon.tintColor = .darkGray
+        
+        switch indexPath.row {
+        case 0:
+            if let date = selectedDate {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy.MM.DD (E)"
+                cell.inputTextLabel.text = dateFormatter.string(from: date)
+            } else {
+                cell.inputTextLabel.text = nil
+            }
+        case 1:
+            if let tag = selectedTag {
+                cell.inputTextLabel.text = tag
+            } else {
+                cell.inputTextLabel.text = nil
+            }
+        case 2:
+            if let priority = selectedPriority {
+                cell.inputTextLabel.text = priority
+            } else {
+                cell.inputTextLabel.text = nil
+            }
+//        case 3:
+//            if let image = selectedImage {
+//                cell.menuIcon.image = image
+//            } else {
+//                cell.menuIcon.image = UIImage(systemName: "camera")
+//            }
+        default:
+            cell.inputTextLabel.text = nil
+        }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch indexPath.row {
+        case 0:
+            print("마감일")
+            let dateVC = DateViewController()
+            dateVC.delegate = self
+            navigationController?.pushViewController(dateVC, animated: true)
+        case 1:
+            print("태그")
+            let tagVC = TagViewController()
+            tagVC.delegate = self
+            navigationController?.pushViewController(tagVC, animated: true)
+        case 2:
+            print("우선순위")
+            let priorityVC = PriorityViewController()
+            priorityVC.delegate = self
+            navigationController?.pushViewController(priorityVC, animated: true)
+        case 3:
+            print("이미지 추가")
+            var configuration = PHPickerConfiguration()
+            configuration.selectionLimit = 3
+            configuration.filter = .any(of: [.screenshots, .images])
+            
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
+            present(picker, animated: true)
+        default:
+            break
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -194,7 +270,4 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         view.backgroundColor = .clear // 간격을 위한 빈 뷰
         return view
     }
-    
-    
 }
-

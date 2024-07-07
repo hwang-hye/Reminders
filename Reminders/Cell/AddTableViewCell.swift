@@ -13,11 +13,13 @@ class AddTableViewCell: BaseTableViewCell {
     
     let cellBackgroundView = UIView()
     let menuTitleLabel = UILabel()
+    let inputTextLabel = UILabel()
     let menuIcon = UIImageView()
     
     override func configureHierarchy() {
         contentView.addSubview(cellBackgroundView)
         cellBackgroundView.addSubview(menuTitleLabel)
+        cellBackgroundView.addSubview(inputTextLabel)
         cellBackgroundView.addSubview(menuIcon)
     }
     
@@ -34,14 +36,19 @@ class AddTableViewCell: BaseTableViewCell {
             make.trailing.verticalEdges.equalTo(cellBackgroundView.safeAreaLayoutGuide).inset(14)
             make.height.equalTo(14)
         }
+        inputTextLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(menuIcon.snp.leading).inset(-10)
+            make.verticalEdges.equalTo(cellBackgroundView.safeAreaLayoutGuide).inset(14)
+            make.width.equalTo(160)
+            make.height.equalTo(14)
+        }
     }
     override func configureView() {
-        cellBackgroundView.backgroundColor = .white.withAlphaComponent(0.2)
+        cellBackgroundView.backgroundColor = .white.withAlphaComponent(0.08)
         cellBackgroundView.layer.cornerRadius = 10
-//        menuTitleLabel.backgroundColor = .blue
-//        menuIconLabel.backgroundColor = .blue
-        
         menuTitleLabel.text = "메뉴"
+        inputTextLabel.textColor = .white
+        inputTextLabel.textAlignment = .right
         menuIcon.image = UIImage(systemName: "chevron.right")
     }
 }

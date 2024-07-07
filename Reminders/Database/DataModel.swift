@@ -14,10 +14,10 @@ class ReminderListTable: Object {
     @Persisted var content: String?
     @Persisted var deadLineDate: String?
     
-    convenience init(title: String, content: String?, deadLineDate: String?) {
+    convenience init(title: String, content: String?, date: String?) {
         self.init()
         self.title = title
         self.content = content
-        self.deadLineDate = deadLineDate
+        self.deadLineDate = date
     }
 }

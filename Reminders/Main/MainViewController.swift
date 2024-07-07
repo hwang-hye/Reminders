@@ -96,7 +96,7 @@ class MainViewController: BaseViewController {
         titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
         titleLabel.textColor = .darkGray
         
-        collectiocView.backgroundColor = .black
+        collectiocView.backgroundColor = .clear
         
         addTodoButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
         addTodoButton.setTitle(" 새로운 할 일", for: .normal)
@@ -110,7 +110,9 @@ class MainViewController: BaseViewController {
     
     @objc func addTodoButtonClicked() {
         let vc = AddViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        //navigationController?.pushViewController(vc, animated: true)
+        self.present(nav, animated: true)
     }
 }
 
