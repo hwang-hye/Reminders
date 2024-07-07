@@ -44,9 +44,15 @@ class PriorityViewController: BaseViewController {
     }
     
     @objc func backButtonClicked() {
-        let selectedPriority = segmentedController.titleForSegment(at: segmentedController.selectedSegmentIndex) ?? ""
-        print("선택된 우선순위: \(selectedPriority)")
-        delegate?.didSelectPriority(selectedPriority)
-        navigationController?.popViewController(animated: true)
+        let selectedPriority: String
+          if segmentedController.selectedSegmentIndex != UISegmentedControl.noSegment {
+              selectedPriority = segmentedController.titleForSegment(at: segmentedController.selectedSegmentIndex) ?? ""
+          } else {
+              selectedPriority = ""
+          }
+          
+          print("선택된 우선순위: \(selectedPriority)")
+          delegate?.didSelectPriority(selectedPriority)
+          navigationController?.popViewController(animated: true)
     }
 }
