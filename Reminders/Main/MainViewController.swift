@@ -8,6 +8,14 @@
 import UIKit
 import SnapKit
 
+enum FilterType {
+    case today
+    case upcoming
+    case all
+    case flagged
+    case completed
+}
+
 class MainViewController: BaseViewController {
     
     let titleLabel = UILabel()
@@ -130,23 +138,27 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = ReminderListViewController()
         
         switch indexPath.item {
         case 0:
             print("오늘")
+            vc.filterType = .today
         case 1:
             print("예정")
+            vc.filterType = .upcoming
         case 2:
             print("전체")
-            let allListVC = ReminderListViewController()
-            navigationController?.pushViewController(allListVC, animated: true)
+            vc.filterType = .all
         case 3:
             print("깃발 표시")
+            vc.filterType = .flagged
         case 4:
             print("완료됨")
+            vc.filterType = .completed
         default:
-            break
+            vc.filterType = .all
         }
-        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

@@ -12,11 +12,11 @@ class ReminderTable: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted(indexed: true) var title: String // 필수
     @Persisted var content: String?
-    @Persisted var date: String?
+    @Persisted var date: Date?
     @Persisted var tag: String?
     @Persisted var priority: String?
     
-    convenience init(title: String, content: String?, date: String?, tag: String?, priority: String?) {
+    convenience init(title: String, content: String?, date: Date?, tag: String?, priority: String?) {
         self.init()
         self.title = title
         self.content = content

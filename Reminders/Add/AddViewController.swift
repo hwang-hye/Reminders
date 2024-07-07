@@ -61,15 +61,12 @@ class AddViewController: BaseViewController {
             view.showToast(message: "제목을 입력해주세요")
             return
         }
-        // 각 셀에 담긴 데이터
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd (E)"
-        let dateString = selectedDate != nil ? dateFormatter.string(from: selectedDate!) : nil
-        
+
+        let date = selectedDate
         let tag = selectedTag
         let priority = selectedPriority
         
-        let data = ReminderTable(title: title, content: content, date: dateString, tag: tag, priority: priority)
+        let data = ReminderTable(title: title, content: content, date: date, tag: tag, priority: priority)
         repository.createItem(data)
         
         if let image = photoImageView.image {
@@ -248,7 +245,6 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // tableView.deselectRow(at: indexPath, animated: true)
         
         switch indexPath.row {
         case 0:
