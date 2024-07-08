@@ -16,12 +16,30 @@ enum FilterType {
     case completed
 }
 
-class MainViewController: BaseViewController {
+class MainViewController: BaseViewController, AddViewControllerDelegate {
+    
+    func didAddReminder() {
+        updateMainViewControllerCounts()
+        collectiocView.reloadData()
+    }
+    
+    func updateMainViewControllerCounts() {
+        // Realm에서 데이터 가져와서 countLabel 업데이트
+        let todayCount = repository.fetchTodayCount()
+        let upcomingCount = repository.fetchUpcomingCount()
+        let allCount = repository.fetchAllCount()
+        let flaggedCount = repository.fetchFlaggedCount()
+        let completedCount = repository.fetchCompletedCount()
+    }
     
     let titleLabel = UILabel()
     let addTodoButton = UIButton()
     let addListButton = UIButton()
     lazy var collectiocView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout())
+    
+    var list: [Folder] = []
+    var counts: [Int] = [0, 0, 0, 0, 0]
+    let repository = DataRepository()
     
     let icons: [UIImage?] = [
         UIImage(systemName: "pencil.circle.fill"),
@@ -62,9 +80,26 @@ class MainViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        list = repository.fetchFolder()
+        print(list)
+        print(repository.detectRealmURL())
+        print(#function)
+        
         configureHierarchy()
         configureLayout()
         configureView()
+        // fetchData()
+        updateMainViewControllerCounts()
+        
+        //        NotificationCenter.default.addObserver(self, selector: #selector(updateCounts(_:)), name: NSNotification.Name("ReminderCountUpdated"), object: nil)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(#function)
+        collectiocView.reloadData()
     }
     
     override func configureHierarchy() {
@@ -95,7 +130,7 @@ class MainViewController: BaseViewController {
         addListButton.snp.makeConstraints { make in
             make.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.bottom.equalTo(addTodoButton.snp.bottom)
-
+            
         }
     }
     
@@ -118,10 +153,27 @@ class MainViewController: BaseViewController {
     
     @objc func addTodoButtonClicked() {
         let vc = AddViewController()
+        vc.delegate = self
         let nav = UINavigationController(rootViewController: vc)
-        //navigationController?.pushViewController(vc, animated: true)
         self.present(nav, animated: true)
     }
+    
+    //    private func fetchData() {
+    //            let todayCount = repository.fetchTodayCount()
+    //            let upcomingCount = repository.fetchUpcomingCount()
+    //            let allCount = repository.fetchAllCount()
+    //            let flaggedCount = repository.fetchFlaggedCount()
+    //            let completedCount = repository.fetchCompletedCount()
+    //            
+    //            counts = [todayCount, upcomingCount, allCount, flaggedCount, completedCount]
+    //        }
+    
+    //    @objc private func updateCounts(_ notification: Notification) {
+    //        if let newCounts = notification.object as? [Int] {
+    //            counts = newCounts
+    //            collectiocView.reloadData()
+    //        }
+    //    }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -131,9 +183,26 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
+        
         cell.cellIcon.image = icons[indexPath.item]
         cell.cellIcon.tintColor = iconColors[indexPath.item]
         cell.statusLabel.text = statusTexts[indexPath.item]
+        // cell.countLabel.text = "\(counts[indexPath.item])"
+        switch indexPath.item {
+        case 0:
+            cell.countLabel.text = "\(repository.fetchTodayCount())"
+        case 1:
+            cell.countLabel.text = "\(repository.fetchUpcomingCount())"
+        case 2:
+            cell.countLabel.text = "\(repository.fetchAllCount())"
+        case 3:
+            cell.countLabel.text = "\(repository.fetchFlaggedCount())"
+        case 4:
+            cell.countLabel.text = "\(repository.fetchCompletedCount())"
+        default:
+            cell.countLabel.text = "0"
+        }
+        
         return cell
     }
     

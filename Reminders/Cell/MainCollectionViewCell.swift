@@ -41,8 +41,8 @@ class MainCollectionViewCell: BaseCollectionViewCell {
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(8)
             make.height.equalTo(36)
         }
-        
     }
+    
     override func configureView() {
         cellView.backgroundColor = .white.withAlphaComponent(0.12)
         cellView.layer.cornerRadius = 12

@@ -10,7 +10,13 @@ import RealmSwift
 import SnapKit
 import PhotosUI
 
+protocol AddViewControllerDelegate: AnyObject {
+    func didAddReminder()
+}
+
 class AddViewController: BaseViewController {
+    weak var delegate: AddViewControllerDelegate?
+    
     let textFieldView = UIView()
     let textFieldLine = UIView()
     let titleTextField = UITextField()
@@ -34,8 +40,6 @@ class AddViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let realm = try! Realm()
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         self.title = "새로운 할 일"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -72,6 +76,8 @@ class AddViewController: BaseViewController {
         if let image = photoImageView.image {
             saveImageToDocument(image: image, filename: "\(data.id)")
         }
+        
+        delegate?.didAddReminder()
         dismiss(animated: true, completion: nil)
     }
     

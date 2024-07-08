@@ -13,21 +13,19 @@ class ReminderListViewController: BaseViewController {
     
     let reminderListTableView = UITableView()
     var reminderList: Results<ReminderTable>!
-    let realm = try! Realm()
     var filterType: FilterType?
+    let repository = DataRepository()
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData()
-
-        //        reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
-        // 필터 기능 처리
+        fetchData()        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print(#function)
-        reminderListTableView.reloadData()
+        fetchData()
     }
     
     override func configureHierarchy() {
@@ -43,39 +41,61 @@ class ReminderListViewController: BaseViewController {
     override func configureView() {
         super.configureView()
         reminderListTableView.backgroundColor = .black
-        // reminderListTableView.rowHeight = 130
         reminderListTableView.delegate = self
         reminderListTableView.dataSource = self
         reminderListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
     }
     
-    private func fetchData() {
-            switch filterType {
-            case .today:
-                let today = Date()
-                let startOfDay = Calendar.current.startOfDay(for: today)
-                let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
-                reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@", startOfDay, endOfDay).sorted(byKeyPath: "title", ascending: false)
-            case .upcoming:
-                let today = Date()
-                reminderList = realm.objects(ReminderTable.self).filter("date >= %@", today).sorted(byKeyPath: "title", ascending: false)
-            case .all:
-                reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
-            case .flagged:
-                reminderList = realm.objects(ReminderTable.self).filter("isFlagged == true").sorted(byKeyPath: "title", ascending: false)
-            case .completed:
-                reminderList = realm.objects(ReminderTable.self).filter("isCompleted == true").sorted(byKeyPath: "title", ascending: false)
-            case .none:
-                reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
-            }
+    @objc private func fetchData() {
+        switch filterType {
+        case .today:
+            let today = Date()
+            let startOfDay = Calendar.current.startOfDay(for: today)
+            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+            reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@", startOfDay, endOfDay).sorted(byKeyPath: "title", ascending: false)
+        case .upcoming:
+            let today = Date()
+            reminderList = realm.objects(ReminderTable.self).filter("date >= %@", today).sorted(byKeyPath: "title", ascending: false)
+        case .all:
+            reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
+        case .flagged:
+            reminderList = realm.objects(ReminderTable.self).filter("isFlagged == true").sorted(byKeyPath: "title", ascending: false)
+        case .completed:
+            reminderList = realm.objects(ReminderTable.self).filter("isCompleted == true").sorted(byKeyPath: "title", ascending: false)
+        case .none:
+            reminderList = realm.objects(ReminderTable.self).sorted(byKeyPath: "title", ascending: false)
         }
-    
+        DispatchQueue.main.async {
+            self.reminderListTableView.reloadData()
+            
+            //            if let count = self.reminderList?.count {
+            //                self.mainVC?.reminderListCount = count
+            //                self.mainVC?.collectiocView.reloadData()
+            //            }
+        }
+    }
     private func deleteReminder(at indexPath: IndexPath) {
-        let reminder = reminderList[indexPath.row]
-        try! realm.write {
-            realm.delete(reminder)
+        guard let reminder = reminderList?[indexPath.row] else { return }
+        
+        let reminderId = reminder.id
+        
+        do {
+            try realm.write {
+                realm.delete(reminder)
+            }
+            removeImageFromDocument(filename: "\(reminderId)")
+            fetchData()
+        } catch {
+            print("Error deleting reminder: \(error)")
         }
-        reminderListTableView.deleteRows(at: [indexPath], with: .automatic)
+        
+        //        try! realm.write {
+        //            realm.delete(reminder)
+        //        }
+        //        reminderListTableView.deleteRows(at: [indexPath], with: .automatic)
+        //        removeImageFromDocument(filename: "\(reminder.id)")
+        //
+        //    }
     }
 }
 
@@ -91,7 +111,7 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
-        // cell.dateLabel.text = data.date
+        
         if let date = data.date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd (E)"

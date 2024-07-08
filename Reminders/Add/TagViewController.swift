@@ -19,12 +19,12 @@ class TagViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
     }
+    
     override func configureHierarchy() {
         view.addSubview(tagTextField)
     }
+    
     override func configureLayout() {
         tagTextField.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
@@ -46,7 +46,10 @@ class TagViewController: BaseViewController {
     }
     
     @objc func backButtonClicked() {
-        delegate?.didSelectTag(tagTextField.text ?? "")
+        //delegate?.didSelectTag(tagTextField.text ?? "")
+        if let text = tagTextField.text, !text.isEmpty {
+            delegate?.didSelectTag(text)
+        }
         navigationController?.popViewController(animated: true)
     }
 }
