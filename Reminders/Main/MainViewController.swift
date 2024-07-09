@@ -134,7 +134,7 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         }
     }
     
-    override func configureView() {        
+    override func configureView() {
         titleLabel.text = "전체"
         titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
         titleLabel.textColor = .darkGray
@@ -164,7 +164,7 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
     //            let allCount = repository.fetchAllCount()
     //            let flaggedCount = repository.fetchFlaggedCount()
     //            let completedCount = repository.fetchCompletedCount()
-    //            
+    //
     //            counts = [todayCount, upcomingCount, allCount, flaggedCount, completedCount]
     //        }
     

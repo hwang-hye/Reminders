@@ -13,7 +13,7 @@ class ListTableViewCell: BaseTableViewCell {
     
     var indexPath: IndexPath!
     
-//    let checkBoxButton = UIButton()
+    let checkBoxButton = UIButton()
     let photoImage = UIImageView()
     let titleLabel = UILabel()
     let memoLabel = UILabel()
@@ -23,6 +23,7 @@ class ListTableViewCell: BaseTableViewCell {
     var deleteAction: (() -> Void)?
     
     override func configureHierarchy() {
+        contentView.addSubview(checkBoxButton)
         contentView.addSubview(photoImage)
         contentView.addSubview(titleLabel)
         contentView.addSubview(memoLabel)
@@ -31,12 +32,14 @@ class ListTableViewCell: BaseTableViewCell {
     }
     
     override func configureLayout() {
-//        checkBoxButton.snp.makeConstraints { make in
-//            make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(16)
-//            make.width.equalTo(80)
-//        }
+        checkBoxButton.snp.makeConstraints { make in
+            make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.width.equalTo(80)
+        }
+        
         photoImage.snp.makeConstraints { make in
-            make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(16)
+            make.leading.equalTo(checkBoxButton.snp.trailing)
+            make.verticalEdges.equalTo(contentView.safeAreaLayoutGuide).inset(16)
             make.width.equalTo(100)
         }
         
@@ -66,8 +69,6 @@ class ListTableViewCell: BaseTableViewCell {
         }
     }
     
-
-    
     override func configureView() {
         contentView.backgroundColor = .backgroundGray
         titleLabel.textColor = .white
@@ -76,23 +77,19 @@ class ListTableViewCell: BaseTableViewCell {
         tagLabel.textColor = .white
         memoLabel.numberOfLines = 0
         
-        
-        //        setupCheckBoxButton()
-        
-        
+        setupCheckBoxButton()
     }
     
-//    func setupCheckBoxButton() {
-//        checkBoxButton.setImage(UIImage(systemName: "square"), for: .normal)
-//        checkBoxButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
-//        
-//        checkBoxButton.addTarget(self, action: #selector(checkBoxToggle), for: .touchUpInside)
-//    }
+    func setupCheckBoxButton() {
+        checkBoxButton.setImage(UIImage(systemName: "square"), for: .normal)
+        checkBoxButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
+        checkBoxButton.addTarget(self, action: #selector(checkBoxToggle), for: .touchUpInside)
+    }
     
-//    @objc func checkBoxToggle() {
-//        checkBoxButton.isSelected.toggle()
-//        if checkBoxButton.isSelected {
-//            print("CheckBox is checked.")
-//        }
-//    }
+    @objc func checkBoxToggle() {
+        checkBoxButton.isSelected.toggle()
+        if checkBoxButton.isSelected {
+            print("CheckBox is checked.")
+        }
+    }
 }
