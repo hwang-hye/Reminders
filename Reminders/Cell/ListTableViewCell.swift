@@ -104,13 +104,6 @@ class ListTableViewCell: BaseTableViewCell {
         checkBoxButton.addTarget(self, action: #selector(checkBoxToggle), for: .touchUpInside)
     }
     
-//    @objc func checkBoxToggle() {
-//        checkBoxButton.isSelected.toggle()
-//        if checkBoxButton.isSelected {
-//            print("CheckBox is checked.")
-//        }
-//        delegate?.didToggleCheckBox(at: indexPath, isCompleted: checkBoxButton.isSelected)
-//    }
     @objc func checkBoxToggle() {
         checkBoxButton.isSelected.toggle()
         if delegate != nil {

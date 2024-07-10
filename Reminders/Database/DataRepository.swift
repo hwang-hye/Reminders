@@ -62,7 +62,7 @@ final class DataRepository {
     }
     
     func fetchFlaggedCount() -> Int {
-        return realm.objects(ReminderTable.self).filter("tag == %@", "flagged").count
+        return realm.objects(ReminderTable.self).filter("isFlagged == true").count
     }
     
     func fetchCompletedCount() -> Int {

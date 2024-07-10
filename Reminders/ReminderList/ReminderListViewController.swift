@@ -85,6 +85,22 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         }
     }
     
+    // flagReminder 메서드 수정
+    private func flagReminder(at indexPath: IndexPath) {
+        guard let reminder = reminderList?[indexPath.row] else { return }
+        
+        do {
+            try realm.write {
+                reminder.isFlagged.toggle() // isFlagged 상태를 토글
+            }
+            fetchData() // 데이터를 새로고침하여 UI 업데이트
+        } catch {
+            print("Error flagging reminder: \(error)")
+        }
+    }
+    
+    
+    
     func didSelectPriority(_ priority: String) {
         guard let selectedIndexPath = reminderListTableView.indexPathForSelectedRow,
               let reminder = reminderList?[selectedIndexPath.row] else {
@@ -100,6 +116,7 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
             print("Error updating reminder priority: \(error)")
         }
     }
+    
     
     func showPriorityViewController(for indexPath: IndexPath) {
         let priorityVC = PriorityViewController()
@@ -121,7 +138,7 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
             try realm.write {
                 reminder.isCompleted = isCompleted
             }
-            fetchData() // 필터를 통해 완료된 항목이 사라지도록 데이터를 다시 불러옵니다.
+            fetchData() // 필터를 통해 완료된 항목이 사라지도록 데이터를 다시 불러오기
         } catch {
             print("Error updating reminder completion status: \(error)")
         }
@@ -136,19 +153,20 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
-        guard (reminderList?[indexPath.row]) != nil else { return cell } // 수정: reminder 객체 가져오기
-
+        guard (reminderList?[indexPath.row]) != nil else { return cell } // reminder 객체 가져오기
+        
         let data = reminderList[indexPath.row]
         cell.selectionStyle = .none
         cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
         cell.priorityLabel.text = data.priority
-  
-        cell.indexPath = indexPath  // 추가: indexPath 설정
+        
+        cell.indexPath = indexPath
         cell.deleteAction = { [weak self] in
             self?.deleteReminder(at: indexPath)
         }
+        
         if let date = data.date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd (E)"
@@ -157,10 +175,8 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
             cell.dateLabel.text = nil
         }
         cell.tagLabel.text = data.tag
-        cell.checkBoxButton.isSelected = data.isCompleted // CheckBox의 상태를 isCompleted 값에 따라 설정합니다.
-        cell.delegate = self // Cell의 Delegate를 설정합니다.
-                
-        
+        cell.checkBoxButton.isSelected = data.isCompleted // CheckBox의 상태를 isCompleted 값에 따라 설정
+        cell.delegate = self // Cell의 Delegate를 설정
         
         return cell
     }
@@ -169,10 +185,24 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         showPriorityViewController(for: indexPath)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            deleteReminder(at: indexPath)
+    // cell swipe 기능 처리
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // Delete action
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completion) in
+            self?.deleteReminder(at: indexPath)
+            completion(true)
         }
+        
+        // Flag action 
+        let flagAction = UIContextualAction(style: .normal, title: "Flag") { [weak self] (action, view, completion) in
+            self?.flagReminder(at: indexPath)
+            completion(true)
+        }
+        flagAction.backgroundColor = .systemYellow
+        
+        // SwipeActionsConfiguration 생성 및 반환
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction, flagAction])
+        return configuration
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
