@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Realm 데이터베이스 마이그레이션 설정
         let config = Realm.Configuration(
-            schemaVersion: 1, // 새로운 버전 번호
+            schemaVersion: 2, // 새로운 버전 번호
             migrationBlock: { migration, oldSchemaVersion in
                 if oldSchemaVersion < 1 {
                     // 마이그레이션 코드 추가
@@ -30,6 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 newObject?["date"] = nil
                             }
                         }
+                    }
+                }
+                if oldSchemaVersion < 2 {
+                    // 새로운 필드에 대한 기본값 설정
+                    migration.enumerateObjects(ofType: ReminderTable.className()) { oldObject, newObject in
+                        newObject?["isFlagged"] = false
+                        newObject?["isCompleted"] = false
                     }
                 }
             }

@@ -66,7 +66,7 @@ final class DataRepository {
     }
     
     func fetchCompletedCount() -> Int {
-        return realm.objects(ReminderTable.self).filter("priority == %@", "completed").count
+        return realm.objects(ReminderTable.self).filter("isCompleted == true").count
     }
 }
 

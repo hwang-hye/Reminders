@@ -8,10 +8,15 @@
 import UIKit
 import SnapKit
 
+protocol ListTableViewCellDelegate: AnyObject {
+    func didToggleCheckBox(at indexPath: IndexPath, isCompleted: Bool)
+}
+
 class ListTableViewCell: BaseTableViewCell {
     static let id = "ListTableViewCell"
     
     var indexPath: IndexPath!
+    weak var delegate: ListTableViewCellDelegate?
     
     let checkBoxButton = UIButton()
     let photoImage = UIImageView()
@@ -40,11 +45,6 @@ class ListTableViewCell: BaseTableViewCell {
     }
     
     override func configureLayout() {
-        priorityLabel.snp.makeConstraints { make in
-               make.top.equalTo(titleLabel.snp.bottom).offset(4)
-               make.leading.equalTo(titleLabel)
-           }
-        
         checkBoxButton.snp.makeConstraints { make in
             make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide)
             make.width.equalTo(80)
@@ -57,10 +57,15 @@ class ListTableViewCell: BaseTableViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.trailing.top.equalTo(contentView.safeAreaLayoutGuide).inset(16)
+            make.top.equalTo(contentView.safeAreaLayoutGuide).offset(16)
             make.leading.equalTo(photoImage.snp.trailing).offset(8)
             make.height.equalTo(18)
         }
+        
+        priorityLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView.safeAreaLayoutGuide).inset(16)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(8)
+           }
         
         memoLabel.snp.makeConstraints { make in
             make.trailing.equalTo(contentView.safeAreaLayoutGuide).inset(16)
@@ -94,15 +99,24 @@ class ListTableViewCell: BaseTableViewCell {
     }
     
     func setupCheckBoxButton() {
-        checkBoxButton.setImage(UIImage(systemName: "square"), for: .normal)
-        checkBoxButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
+        checkBoxButton.setImage(UIImage(systemName: "circle"), for: .normal)
+        checkBoxButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .selected)
         checkBoxButton.addTarget(self, action: #selector(checkBoxToggle), for: .touchUpInside)
     }
     
+//    @objc func checkBoxToggle() {
+//        checkBoxButton.isSelected.toggle()
+//        if checkBoxButton.isSelected {
+//            print("CheckBox is checked.")
+//        }
+//        delegate?.didToggleCheckBox(at: indexPath, isCompleted: checkBoxButton.isSelected)
+//    }
     @objc func checkBoxToggle() {
         checkBoxButton.isSelected.toggle()
-        if checkBoxButton.isSelected {
-            print("CheckBox is checked.")
+        if delegate != nil {
+            delegate!.didToggleCheckBox(at: indexPath, isCompleted: checkBoxButton.isSelected)
+        } else {
+            print("Delegate is nil")
         }
     }
 }

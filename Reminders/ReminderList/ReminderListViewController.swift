@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import SnapKit
 
-class ReminderListViewController: BaseViewController, PriorityViewControllerDelegate {
+class ReminderListViewController: BaseViewController, PriorityViewControllerDelegate, ListTableViewCellDelegate {
     
     let reminderListTableView = UITableView()
     var reminderList: Results<ReminderTable>!
@@ -113,6 +113,19 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         }
         navigationController?.pushViewController(priorityVC, animated: true)
     }
+    
+    func didToggleCheckBox(at indexPath: IndexPath, isCompleted: Bool) {
+        guard let reminder = reminderList?[indexPath.row] else { return }
+        
+        do {
+            try realm.write {
+                reminder.isCompleted = isCompleted
+            }
+            fetchData() // 필터를 통해 완료된 항목이 사라지도록 데이터를 다시 불러옵니다.
+        } catch {
+            print("Error updating reminder completion status: \(error)")
+        }
+    }
 }
 
 extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -121,14 +134,21 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
+        guard (reminderList?[indexPath.row]) != nil else { return cell } // 수정: reminder 객체 가져오기
+
         let data = reminderList[indexPath.row]
         cell.selectionStyle = .none
         cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
         cell.priorityLabel.text = data.priority
-        
+  
+        cell.indexPath = indexPath  // 추가: indexPath 설정
+        cell.deleteAction = { [weak self] in
+            self?.deleteReminder(at: indexPath)
+        }
         if let date = data.date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy.MM.dd (E)"
@@ -137,10 +157,11 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
             cell.dateLabel.text = nil
         }
         cell.tagLabel.text = data.tag
-        cell.deleteAction = { [weak self] in
-            self?.deleteReminder(at: indexPath)
-        }
-        cell.priorityLabel.text = data.priority
+        cell.checkBoxButton.isSelected = data.isCompleted // CheckBox의 상태를 isCompleted 값에 따라 설정합니다.
+        cell.delegate = self // Cell의 Delegate를 설정합니다.
+                
+        
+        
         return cell
     }
     

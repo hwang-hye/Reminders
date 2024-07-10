@@ -187,7 +187,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.cellIcon.image = icons[indexPath.item]
         cell.cellIcon.tintColor = iconColors[indexPath.item]
         cell.statusLabel.text = statusTexts[indexPath.item]
-        // cell.countLabel.text = "\(counts[indexPath.item])"
+        
         switch indexPath.item {
         case 0:
             cell.countLabel.text = "\(repository.fetchTodayCount())"

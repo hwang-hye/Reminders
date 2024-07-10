@@ -32,6 +32,8 @@ class ReminderTable: Object {
     @Persisted var date: Date?
     @Persisted var tag: String?
     @Persisted var priority: String?
+    @Persisted var isFlagged: Bool = false
+    @Persisted var isCompleted: Bool = false
     
     convenience init(title: String, content: String?, date: Date?, tag: String?, priority: String?) {
         self.init()
