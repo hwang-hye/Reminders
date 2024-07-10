@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+
 protocol PriorityViewControllerDelegate: AnyObject {
     func didSelectPriority(_ priority: String)
 }
@@ -22,8 +23,26 @@ class PriorityViewController: BaseViewController {
     
     weak var delegate: PriorityViewControllerDelegate?
     
+    let viewModel = PriorityViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindData()
+    }
+    
+    func bindData() {
+        viewModel.outputPriorityTag.bind { [weak self] priorityString in
+            switch priorityString {
+            case "높음":
+                self?.segmentedController.selectedSegmentIndex = 0
+            case "보통":
+                self?.segmentedController.selectedSegmentIndex = 1
+            case "낮음":
+                self?.segmentedController.selectedSegmentIndex = 2
+            default:
+                self?.segmentedController.selectedSegmentIndex = UISegmentedControl.noSegment
+            }
+        }
     }
     
     override func configureHierarchy() {
@@ -44,15 +63,20 @@ class PriorityViewController: BaseViewController {
     }
     
     @objc func backButtonClicked() {
-        let selectedPriority: String
-          if segmentedController.selectedSegmentIndex != UISegmentedControl.noSegment {
-              selectedPriority = segmentedController.titleForSegment(at: segmentedController.selectedSegmentIndex) ?? ""
-          } else {
-              selectedPriority = ""
-          }
-          
-          print("선택된 우선순위: \(selectedPriority)")
-          delegate?.didSelectPriority(selectedPriority)
-          navigationController?.popViewController(animated: true)
+        if segmentedController.selectedSegmentIndex != UISegmentedControl.noSegment {
+            let selectedPriority = Priority(rawValue: segmentedController.selectedSegmentIndex) ?? .medium
+            viewModel.inputPriorityTag.value = selectedPriority
+            
+            let selectedPriorityString = selectedPriority.description
+            
+            print("선택된 우선순위: \(selectedPriorityString)")
+            delegate?.didSelectPriority(selectedPriorityString)
+        } else {
+            print("우선순위가 선택되지 않음")
+            delegate?.didSelectPriority("")
+        }
+        
+        navigationController?.popViewController(animated: true)
+        
     }
 }

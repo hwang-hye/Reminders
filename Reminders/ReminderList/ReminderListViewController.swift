@@ -9,7 +9,7 @@ import UIKit
 import RealmSwift
 import SnapKit
 
-class ReminderListViewController: BaseViewController {
+class ReminderListViewController: BaseViewController, PriorityViewControllerDelegate {
     
     let reminderListTableView = UITableView()
     var reminderList: Results<ReminderTable>!
@@ -19,7 +19,7 @@ class ReminderListViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData()        
+        fetchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,11 +67,6 @@ class ReminderListViewController: BaseViewController {
         }
         DispatchQueue.main.async {
             self.reminderListTableView.reloadData()
-            
-            //            if let count = self.reminderList?.count {
-            //                self.mainVC?.reminderListCount = count
-            //                self.mainVC?.collectiocView.reloadData()
-            //            }
         }
     }
     private func deleteReminder(at indexPath: IndexPath) {
@@ -88,14 +83,35 @@ class ReminderListViewController: BaseViewController {
         } catch {
             print("Error deleting reminder: \(error)")
         }
+    }
+    
+    func didSelectPriority(_ priority: String) {
+        guard let selectedIndexPath = reminderListTableView.indexPathForSelectedRow,
+              let reminder = reminderList?[selectedIndexPath.row] else {
+            return
+        }
         
-        //        try! realm.write {
-        //            realm.delete(reminder)
-        //        }
-        //        reminderListTableView.deleteRows(at: [indexPath], with: .automatic)
-        //        removeImageFromDocument(filename: "\(reminder.id)")
-        //
-        //    }
+        do {
+            try realm.write {
+                reminder.priority = priority
+            }
+            reminderListTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+        } catch {
+            print("Error updating reminder priority: \(error)")
+        }
+    }
+    
+    func showPriorityViewController(for indexPath: IndexPath) {
+        let priorityVC = PriorityViewController()
+        priorityVC.delegate = self
+        if let reminder = reminderList?[indexPath.row] {
+            if let priorityInt = Int(reminder.priority!) {
+                priorityVC.viewModel.inputPriorityTag.value = Priority(rawValue: priorityInt) ?? .medium
+            } else {
+                priorityVC.viewModel.inputPriorityTag.value = .medium
+            }
+        }
+        navigationController?.pushViewController(priorityVC, animated: true)
     }
 }
 
@@ -111,6 +127,7 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
         cell.titleLabel.text = data.title
         cell.memoLabel.text = data.content
+        cell.priorityLabel.text = data.priority
         
         if let date = data.date {
             let dateFormatter = DateFormatter()
@@ -123,7 +140,12 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         cell.deleteAction = { [weak self] in
             self?.deleteReminder(at: indexPath)
         }
+        cell.priorityLabel.text = data.priority
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showPriorityViewController(for: indexPath)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

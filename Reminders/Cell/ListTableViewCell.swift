@@ -22,6 +22,13 @@ class ListTableViewCell: BaseTableViewCell {
     
     var deleteAction: (() -> Void)?
     
+    let priorityLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .gray
+        return label
+    }()
+    
     override func configureHierarchy() {
         contentView.addSubview(checkBoxButton)
         contentView.addSubview(photoImage)
@@ -29,9 +36,15 @@ class ListTableViewCell: BaseTableViewCell {
         contentView.addSubview(memoLabel)
         contentView.addSubview(dateLabel)
         contentView.addSubview(tagLabel)
+        contentView.addSubview(priorityLabel)
     }
     
     override func configureLayout() {
+        priorityLabel.snp.makeConstraints { make in
+               make.top.equalTo(titleLabel.snp.bottom).offset(4)
+               make.leading.equalTo(titleLabel)
+           }
+        
         checkBoxButton.snp.makeConstraints { make in
             make.leading.verticalEdges.equalTo(contentView.safeAreaLayoutGuide)
             make.width.equalTo(80)

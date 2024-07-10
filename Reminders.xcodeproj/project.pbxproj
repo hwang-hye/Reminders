@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		273844FF2C3D4288009BD841 /* PriorityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273844FE2C3D4288009BD841 /* PriorityViewModel.swift */; };
+		273845012C3D444B009BD841 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273845002C3D444B009BD841 /* Observable.swift */; };
 		2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49B2C34336E009A81B5 /* AppDelegate.swift */; };
 		2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49D2C34336E009A81B5 /* SceneDelegate.swift */; };
 		2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49F2C34336E009A81B5 /* AddViewController.swift */; };
@@ -32,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		273844FE2C3D4288009BD841 /* PriorityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewModel.swift; sourceTree = "<group>"; };
+		273845002C3D444B009BD841 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		2775E4982C34336E009A81B5 /* Reminders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2775E49B2C34336E009A81B5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2775E49D2C34336E009A81B5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -69,6 +73,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		273844FD2C3D4230009BD841 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				273844FE2C3D4288009BD841 /* PriorityViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		2775E48F2C34336E009A81B5 = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +101,7 @@
 		2775E49A2C34336E009A81B5 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
+				273844FD2C3D4230009BD841 /* ViewModel */,
 				2775E4C42C345A72009A81B5 /* Database */,
 				2775E4BF2C3454C9009A81B5 /* Cell */,
 				2775E4D32C38204A009A81B5 /* Main */,
@@ -100,6 +113,7 @@
 				2775E4A42C34336F009A81B5 /* Assets.xcassets */,
 				2775E4A62C34336F009A81B5 /* LaunchScreen.storyboard */,
 				2775E4A92C34336F009A81B5 /* Info.plist */,
+				273845002C3D444B009BD841 /* Observable.swift */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -240,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				273845012C3D444B009BD841 /* Observable.swift in Sources */,
 				2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */,
 				2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */,
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
@@ -248,6 +263,7 @@
 				2775E4BE2C345209009A81B5 /* ReminderListViewController.swift in Sources */,
 				2775E4D72C382219009A81B5 /* BaseCollectionViewCell.swift in Sources */,
 				2775E4C32C34550E009A81B5 /* BaseTableViewCell.swift in Sources */,
+				273844FF2C3D4288009BD841 /* PriorityViewModel.swift in Sources */,
 				2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */,
 				2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */,
 				2775E4E42C3AB02F009A81B5 /* DataRepository.swift in Sources */,
