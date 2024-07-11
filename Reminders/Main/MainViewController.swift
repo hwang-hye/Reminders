@@ -23,13 +23,15 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         collectiocView.reloadData()
     }
     
-    func updateMainViewControllerCounts() {
-        // Realm에서 데이터 가져와서 countLabel 업데이트
+    @objc func updateMainViewControllerCounts() {
         let todayCount = repository.fetchTodayCount()
         let upcomingCount = repository.fetchUpcomingCount()
         let allCount = repository.fetchAllCount()
         let flaggedCount = repository.fetchFlaggedCount()
         let completedCount = repository.fetchCompletedCount()
+        
+        counts = [todayCount, upcomingCount, allCount, flaggedCount, completedCount]
+        collectiocView.reloadData()
     }
     
     let titleLabel = UILabel()
@@ -93,6 +95,10 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         updateMainViewControllerCounts()
         
         //        NotificationCenter.default.addObserver(self, selector: #selector(updateCounts(_:)), name: NSNotification.Name("ReminderCountUpdated"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateCounts), name: NSNotification.Name("UpdateMainViewControllerCounts"), object: nil)
+
+
         
     }
     
@@ -158,6 +164,11 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         self.present(nav, animated: true)
     }
     
+    @objc func handleUpdateCounts() {
+           updateMainViewControllerCounts()
+           collectiocView.reloadData()
+       }
+    
     //    private func fetchData() {
     //            let todayCount = repository.fetchTodayCount()
     //            let upcomingCount = repository.fetchUpcomingCount()
@@ -181,6 +192,31 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return icons.count
     }
     
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
+//        
+//        cell.cellIcon.image = icons[indexPath.item]
+//        cell.cellIcon.tintColor = iconColors[indexPath.item]
+//        cell.statusLabel.text = statusTexts[indexPath.item]
+//        
+//        switch indexPath.item {
+//        case 0:
+//            cell.countLabel.text = "\(repository.fetchTodayCount())"
+//        case 1:
+//            cell.countLabel.text = "\(repository.fetchUpcomingCount())"
+//        case 2:
+//            cell.countLabel.text = "\(repository.fetchAllCount())"
+//        case 3:
+//            cell.countLabel.text = "\(repository.fetchFlaggedCount())"
+//        case 4:
+//            cell.countLabel.text = "\(repository.fetchCompletedCount())"
+//        default:
+//            cell.countLabel.text = "0"
+//        }
+//        
+//        return cell
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
         
@@ -188,20 +224,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.cellIcon.tintColor = iconColors[indexPath.item]
         cell.statusLabel.text = statusTexts[indexPath.item]
         
-        switch indexPath.item {
-        case 0:
-            cell.countLabel.text = "\(repository.fetchTodayCount())"
-        case 1:
-            cell.countLabel.text = "\(repository.fetchUpcomingCount())"
-        case 2:
-            cell.countLabel.text = "\(repository.fetchAllCount())"
-        case 3:
-            cell.countLabel.text = "\(repository.fetchFlaggedCount())"
-        case 4:
-            cell.countLabel.text = "\(repository.fetchCompletedCount())"
-        default:
-            cell.countLabel.text = "0"
-        }
+        cell.countLabel.text = "\(counts[indexPath.item])"
         
         return cell
     }

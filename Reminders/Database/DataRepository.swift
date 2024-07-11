@@ -53,9 +53,16 @@ final class DataRepository {
     }
     
     func fetchUpcomingCount() -> Int {
-        let today = Date()
-        return realm.objects(ReminderTable.self).filter("date > %@", today).count
+        let today = Calendar.current.startOfDay(for: Date())
+        return realm.objects(ReminderTable.self)
+            .filter("date > %@ AND isCompleted == false", today)
+            .count
     }
+    
+//    func fetchUpcomingCount() -> Int {
+//        let today = Date()
+//        return realm.objects(ReminderTable.self).filter("date > %@", today).count
+//    }
     
     func fetchAllCount() -> Int {
         return realm.objects(ReminderTable.self).count
@@ -67,6 +74,12 @@ final class DataRepository {
     
     func fetchCompletedCount() -> Int {
         return realm.objects(ReminderTable.self).filter("isCompleted == true").count
+    }
+    
+    func moveToCompleted(_ reminder: ReminderTable) {
+        // 이미 write 트랜잭션이 내부에 있다??
+        reminder.isCompleted = true
+        reminder.isFlagged = false  // 완료된 항목은 깃발 표시 해제
     }
 }
 
