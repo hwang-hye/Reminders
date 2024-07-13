@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Realm 데이터베이스 마이그레이션 설정
         let config = Realm.Configuration(
-            schemaVersion: 2, // 새로운 버전 번호
+            schemaVersion: 4, // 새로운 버전 번호
             migrationBlock: { migration, oldSchemaVersion in
                 if oldSchemaVersion < 1 {
                     // 마이그레이션 코드 추가
@@ -39,12 +39,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         newObject?["isCompleted"] = false
                     }
                 }
+                if oldSchemaVersion < 3 {
+                    // icon 추가
+                    migration.enumerateObjects(ofType: Folder.className()) { oldObject, newObject in
+                        newObject?["icon"] = "folder.circle"
+                    }
+                }
+                if oldSchemaVersion < 4 {
+                    // Folder icon, name 수정
+                }
             }
         )
         
+        let icons: [String] = [
+            "pencil.circle.fill",
+            "calendar.circle.fill",
+            "tray.circle.fill",
+            "flag.circle.fill",
+            "checkmark.circle.fill"
+        ]
+        
+        let statusTexts: [String] = [
+            "오늘",
+            "예정",
+            "전체",
+            "깃발 표시",
+            "완료됨"
+        ]
+        
         Realm.Configuration.defaultConfiguration = config
+        
+        let realm = try! Realm()
+        
+        let count = realm.objects(Folder.self).count
+        
+        if count == 0 {
+            for i in 0...4 {
+                let folder = Folder()
+                folder.icon = icons[i]
+                folder.name = statusTexts[i]
+                
+                do {
+                    try realm.write {
+                        realm.add(folder)
+                    }
+                } catch {
+                    print("Write error!")
+                }
+            }
+        }
+        
         return true
     }
+
     
     
     // MARK: UISceneSession Lifecycle

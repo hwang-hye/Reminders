@@ -43,13 +43,13 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
     var counts: [Int] = [0, 0, 0, 0, 0]
     let repository = DataRepository()
     
-    let icons: [UIImage?] = [
-        UIImage(systemName: "pencil.circle.fill"),
-        UIImage(systemName: "calendar.circle.fill"),
-        UIImage(systemName: "tray.circle.fill"),
-        UIImage(systemName: "flag.circle.fill"),
-        UIImage(systemName: "checkmark.circle.fill")
-    ]
+//    let icons: [UIImage?] = [
+//        UIImage(systemName: "pencil.circle.fill"),
+//        UIImage(systemName: "calendar.circle.fill"),
+//        UIImage(systemName: "tray.circle.fill"),
+//        UIImage(systemName: "flag.circle.fill"),
+//        UIImage(systemName: "checkmark.circle.fill")
+//    ]
     
     let iconColors: [UIColor] = [
         .systemBlue,
@@ -59,13 +59,13 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         .systemGray
     ]
     
-    let statusTexts: [String] = [
-        "오늘",
-        "예정",
-        "전체",
-        "깃발 표시",
-        "완료됨"
-    ]
+//    let statusTexts: [String] = [
+//        "오늘",
+//        "예정",
+//        "전체",
+//        "깃발 표시",
+//        "완료됨"
+//    ]
     
     func collectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
@@ -165,15 +165,15 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return icons.count
+        return list.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
         
-        cell.cellIcon.image = icons[indexPath.item]
+        cell.cellIcon.image = UIImage(systemName: list[indexPath.item].icon)
         cell.cellIcon.tintColor = iconColors[indexPath.item]
-        cell.statusLabel.text = statusTexts[indexPath.item]
+        cell.statusLabel.text = list[indexPath.item].name
         
         cell.countLabel.text = "\(counts[indexPath.item])"
         

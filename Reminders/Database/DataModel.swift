@@ -16,8 +16,10 @@ import RealmSwift
 // 3. 완료됨
 // 오늘이 지난 데이터는 어디로 가야 하는지?
 
+
 class Folder: Object {
     @Persisted(primaryKey: true) var id: ObjectId
+    @Persisted var icon: String
     @Persisted var name: String
     @Persisted var count: String
     @Persisted var regDate: Date

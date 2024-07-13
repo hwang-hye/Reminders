@@ -59,11 +59,6 @@ final class DataRepository {
             .count
     }
     
-//    func fetchUpcomingCount() -> Int {
-//        let today = Date()
-//        return realm.objects(ReminderTable.self).filter("date > %@", today).count
-//    }
-    
     func fetchAllCount() -> Int {
         return realm.objects(ReminderTable.self).count
     }
