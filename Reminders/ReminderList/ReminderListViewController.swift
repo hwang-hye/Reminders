@@ -20,6 +20,7 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(#function)
         fetchData()
     }
     
@@ -55,9 +56,7 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
             let startOfDay = Calendar.current.startOfDay(for: today)
             let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
             reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", startOfDay, endOfDay).sorted(byKeyPath: "title", ascending: false)
-//        case .upcoming:
-//            let today = Date()
-//            reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND isCompleted == false", today).sorted(byKeyPath: "title", ascending: false)
+
         case .upcoming:
             let today = Calendar.current.startOfDay(for: Date())
             reminderList = realm.objects(ReminderTable.self)
@@ -72,6 +71,8 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         case .none:
             reminderList = realm.objects(ReminderTable.self).filter("isCompleted == false").sorted(byKeyPath: "title", ascending: false)
         }
+        // UI 업데이트
+        self.reminderListTableView.reloadData()
     }
     
     private func deleteReminder(at indexPath: IndexPath) {

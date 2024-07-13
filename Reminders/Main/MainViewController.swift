@@ -91,20 +91,15 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         configureHierarchy()
         configureLayout()
         configureView()
-        // fetchData()
         updateMainViewControllerCounts()
         
-        //        NotificationCenter.default.addObserver(self, selector: #selector(updateCounts(_:)), name: NSNotification.Name("ReminderCountUpdated"), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateCounts), name: NSNotification.Name("UpdateMainViewControllerCounts"), object: nil)
-
-
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print(#function)
+        updateMainViewControllerCounts()
         collectiocView.reloadData()
     }
     
@@ -118,7 +113,6 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         collectiocView.dataSource = self
         collectiocView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
     }
-    
     override func configureLayout() {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
@@ -139,7 +133,6 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
             
         }
     }
-    
     override func configureView() {
         titleLabel.text = "전체"
         titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
@@ -168,54 +161,12 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
            updateMainViewControllerCounts()
            collectiocView.reloadData()
        }
-    
-    //    private func fetchData() {
-    //            let todayCount = repository.fetchTodayCount()
-    //            let upcomingCount = repository.fetchUpcomingCount()
-    //            let allCount = repository.fetchAllCount()
-    //            let flaggedCount = repository.fetchFlaggedCount()
-    //            let completedCount = repository.fetchCompletedCount()
-    //
-    //            counts = [todayCount, upcomingCount, allCount, flaggedCount, completedCount]
-    //        }
-    
-    //    @objc private func updateCounts(_ notification: Notification) {
-    //        if let newCounts = notification.object as? [Int] {
-    //            counts = newCounts
-    //            collectiocView.reloadData()
-    //        }
-    //    }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return icons.count
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
-//        
-//        cell.cellIcon.image = icons[indexPath.item]
-//        cell.cellIcon.tintColor = iconColors[indexPath.item]
-//        cell.statusLabel.text = statusTexts[indexPath.item]
-//        
-//        switch indexPath.item {
-//        case 0:
-//            cell.countLabel.text = "\(repository.fetchTodayCount())"
-//        case 1:
-//            cell.countLabel.text = "\(repository.fetchUpcomingCount())"
-//        case 2:
-//            cell.countLabel.text = "\(repository.fetchAllCount())"
-//        case 3:
-//            cell.countLabel.text = "\(repository.fetchFlaggedCount())"
-//        case 4:
-//            cell.countLabel.text = "\(repository.fetchCompletedCount())"
-//        default:
-//            cell.countLabel.text = "0"
-//        }
-//        
-//        return cell
-//    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
