@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270B8AF32C449281003EEAA5 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B8AF22C449281003EEAA5 /* DateViewModel.swift */; };
 		273844FF2C3D4288009BD841 /* PriorityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273844FE2C3D4288009BD841 /* PriorityViewModel.swift */; };
 		273845012C3D444B009BD841 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273845002C3D444B009BD841 /* Observable.swift */; };
 		2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49B2C34336E009A81B5 /* AppDelegate.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		270B8AF22C449281003EEAA5 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		273844FE2C3D4288009BD841 /* PriorityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewModel.swift; sourceTree = "<group>"; };
 		273845002C3D444B009BD841 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		2775E4982C34336E009A81B5 /* Reminders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminders.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				273844FE2C3D4288009BD841 /* PriorityViewModel.swift */,
+				270B8AF22C449281003EEAA5 /* DateViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 				273844FF2C3D4288009BD841 /* PriorityViewModel.swift in Sources */,
 				2775E4C62C345A93009A81B5 /* DataModel.swift in Sources */,
 				2775E4D92C382437009A81B5 /* MainCollectionViewCell.swift in Sources */,
+				270B8AF32C449281003EEAA5 /* DateViewModel.swift in Sources */,
 				2775E4E42C3AB02F009A81B5 /* DataRepository.swift in Sources */,
 				2775E49E2C34336E009A81B5 /* SceneDelegate.swift in Sources */,
 				2775E4CC2C361610009A81B5 /* DateViewController.swift in Sources */,

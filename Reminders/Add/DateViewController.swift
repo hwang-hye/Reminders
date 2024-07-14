@@ -18,9 +18,11 @@ class DateViewController: BaseViewController {
     let datePicker = UIDatePicker()
     let selectButton = UIButton()
     
+    let viewModel = DateViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        selectButton.addTarget(self, action: #selector(selectButtonClicked), for: .touchUpInside)
+        setupBindings()
     }
     
     override func configureHierarchy() {
@@ -45,11 +47,25 @@ class DateViewController: BaseViewController {
         datePicker.backgroundColor = .darkGray.withAlphaComponent(0.3)
         selectButton.setTitle("날짜 선택 완료", for: .normal)
         selectButton.setTitleColor(.systemBlue, for: .normal)
+        selectButton.addTarget(self, action: #selector(selectButtonClicked), for: .touchUpInside)
+    }
+    
+    private func setupBindings() {
+        viewModel.selectedDate.bind { [weak self] date in
+            self?.datePicker.date = date
+        }
+        
+        datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
     }
     
     @objc func selectButtonClicked() {
-        let selectedDate = datePicker.date
-        delegate?.didSelectDate(selectedDate)
+        //        let selectedDate = datePicker.date
+        //        delegate?.didSelectDate(selectedDate)
+        delegate?.didSelectDate(viewModel.selectedDate.value)
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func dateChanged() {
+        viewModel.updateDate(datePicker.date)
     }
 }
