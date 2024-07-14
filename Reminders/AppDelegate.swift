@@ -69,13 +69,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "checkmark.circle.fill"
         ]
         
-        let folderTitle: [String] = [
+        let folderTitles: [String] = [
             "오늘",
             "예정",
             "전체",
             "깃발 표시",
             "완료됨"
         ]
+        
+        let folderTypes: [String] = [
+            "today",
+            "upcoming",
+            "all",
+            "flagged",
+            "completed"
+        ]
+        
         
         Realm.Configuration.defaultConfiguration = config
         
@@ -87,7 +96,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for i in 0...4 {
                 let folder = Folder()
                 folder.icon = icons[i]
-                folder.name = folderTitle[i]
+                folder.name = folderTitles[i]
+                folder.filterType = folderTypes[i]
                 
                 do {
                     try realm.write {
