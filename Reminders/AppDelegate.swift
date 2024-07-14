@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Realm 데이터베이스 마이그레이션 설정
         let config = Realm.Configuration(
-            schemaVersion: 4, // 새로운 버전 번호
+            schemaVersion: 7, // 새로운 버전 번호
             migrationBlock: { migration, oldSchemaVersion in
                 if oldSchemaVersion < 1 {
                     // 마이그레이션 코드 추가
@@ -48,6 +48,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if oldSchemaVersion < 4 {
                     // Folder icon, name 수정
                 }
+                if oldSchemaVersion < 5 {
+                    // Folder filterType 추가
+                    // ReminderTable Linking Object 연결
+                }
+                if oldSchemaVersion < 6 {
+                    // Folder count type 수정
+                }
+                if oldSchemaVersion < 7 {
+                    // Folder count 프로퍼티 삭제(UI에서 해결)
+                }
             }
         )
         
@@ -59,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "checkmark.circle.fill"
         ]
         
-        let statusTexts: [String] = [
+        let folderTitle: [String] = [
             "오늘",
             "예정",
             "전체",
@@ -77,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for i in 0...4 {
                 let folder = Folder()
                 folder.icon = icons[i]
-                folder.name = statusTexts[i]
+                folder.name = folderTitle[i]
                 
                 do {
                     try realm.write {

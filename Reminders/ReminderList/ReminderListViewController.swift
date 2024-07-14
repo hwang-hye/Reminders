@@ -48,29 +48,10 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         reminderListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
     }
     
-    @objc private func fetchData() {
+    private func fetchData() {
         // filterType에 따라 reminderList 업데이트
-        switch filterType {
-        case .today:
-            let today = Date()
-            let startOfDay = Calendar.current.startOfDay(for: today)
-            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
-            reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", startOfDay, endOfDay).sorted(byKeyPath: "title", ascending: false)
-
-        case .upcoming:
-            let today = Calendar.current.startOfDay(for: Date())
-            reminderList = realm.objects(ReminderTable.self)
-                .filter("date > %@ AND isCompleted == false", today)
-                .sorted(byKeyPath: "date", ascending: true)
-        case .all:
-            reminderList = realm.objects(ReminderTable.self).filter("isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-        case .flagged:
-            reminderList = realm.objects(ReminderTable.self).filter("isFlagged == true AND isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-        case .completed:
-            reminderList = realm.objects(ReminderTable.self).filter("isCompleted == true").sorted(byKeyPath: "title", ascending: false)
-        case .none:
-            reminderList = realm.objects(ReminderTable.self).filter("isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-        }
+        reminderList = repository.fetchData(filterType!)
+        repository.updateAllFolderDetail()
         // UI 업데이트
         self.reminderListTableView.reloadData()
     }
@@ -127,7 +108,7 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         let priorityVC = PriorityViewController()
         priorityVC.delegate = self
         if let reminder = reminderList?[indexPath.row] {
-            if let priorityInt = Int(reminder.priority!) {
+            if let priorityInt = Int(reminder.priority ?? "보통") {
                 priorityVC.viewModel.inputPriorityTag.value = Priority(rawValue: priorityInt) ?? .medium
             } else {
                 priorityVC.viewModel.inputPriorityTag.value = .medium

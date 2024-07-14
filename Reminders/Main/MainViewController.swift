@@ -20,6 +20,7 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
     
     func didAddReminder() {
         updateMainViewControllerCounts()
+        repository.updateAllFolderDetail()
         collectiocView.reloadData()
     }
     
@@ -43,14 +44,6 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
     var counts: [Int] = [0, 0, 0, 0, 0]
     let repository = DataRepository()
     
-//    let icons: [UIImage?] = [
-//        UIImage(systemName: "pencil.circle.fill"),
-//        UIImage(systemName: "calendar.circle.fill"),
-//        UIImage(systemName: "tray.circle.fill"),
-//        UIImage(systemName: "flag.circle.fill"),
-//        UIImage(systemName: "checkmark.circle.fill")
-//    ]
-    
     let iconColors: [UIColor] = [
         .systemBlue,
         .systemRed,
@@ -58,14 +51,6 @@ class MainViewController: BaseViewController, AddViewControllerDelegate {
         .systemYellow,
         .systemGray
     ]
-    
-//    let statusTexts: [String] = [
-//        "오늘",
-//        "예정",
-//        "전체",
-//        "깃발 표시",
-//        "완료됨"
-//    ]
     
     func collectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
