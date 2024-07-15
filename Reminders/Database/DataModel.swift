@@ -8,15 +8,6 @@
 import UIKit
 import RealmSwift
 
-// 다시 수정하기
-// category를 무엇으로 할지 생각해봐야 함
-// 해당 테이블의 경우 분류 기준은?
-// 1. Date(오늘, 예정, 전체)
-// 2. 깃발(like)
-// 3. 완료됨
-// 오늘이 지난 데이터는 어디로 가야 하는지?
-
-
 class Folder: Object {
     @Persisted(primaryKey: true) var id: ObjectId
     @Persisted var icon: String

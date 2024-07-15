@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		270B8AF32C449281003EEAA5 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B8AF22C449281003EEAA5 /* DateViewModel.swift */; };
+		270B8AFC2C452C8C003EEAA5 /* TagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B8AFB2C452C8C003EEAA5 /* TagViewModel.swift */; };
 		273844FF2C3D4288009BD841 /* PriorityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273844FE2C3D4288009BD841 /* PriorityViewModel.swift */; };
 		273845012C3D444B009BD841 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273845002C3D444B009BD841 /* Observable.swift */; };
 		2775E49C2C34336E009A81B5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775E49B2C34336E009A81B5 /* AppDelegate.swift */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		270B8AF22C449281003EEAA5 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
+		270B8AFB2C452C8C003EEAA5 /* TagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewModel.swift; sourceTree = "<group>"; };
 		273844FE2C3D4288009BD841 /* PriorityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityViewModel.swift; sourceTree = "<group>"; };
 		273845002C3D444B009BD841 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		2775E4982C34336E009A81B5 /* Reminders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reminders.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +82,7 @@
 			children = (
 				273844FE2C3D4288009BD841 /* PriorityViewModel.swift */,
 				270B8AF22C449281003EEAA5 /* DateViewModel.swift */,
+				270B8AFB2C452C8C003EEAA5 /* TagViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			files = (
 				273845012C3D444B009BD841 /* Observable.swift in Sources */,
 				2775E4A02C34336E009A81B5 /* AddViewController.swift in Sources */,
+				270B8AFC2C452C8C003EEAA5 /* TagViewModel.swift in Sources */,
 				2775E4DB2C393E99009A81B5 /* AddTableViewCell.swift in Sources */,
 				2775E4B32C3439F4009A81B5 /* BaseViewController.swift in Sources */,
 				2775E4E62C3AC055009A81B5 /* FileManager+.swift in Sources */,
