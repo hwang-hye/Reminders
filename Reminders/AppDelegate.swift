@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Realm 데이터베이스 마이그레이션 설정
         let config = Realm.Configuration(
-            schemaVersion: 7, // 새로운 버전 번호
+            schemaVersion: 8, // 새로운 버전 번호
             migrationBlock: { migration, oldSchemaVersion in
                 if oldSchemaVersion < 1 {
                     // 마이그레이션 코드 추가
@@ -57,6 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 if oldSchemaVersion < 7 {
                     // Folder count 프로퍼티 삭제(UI에서 해결)
+                }
+                if oldSchemaVersion < 8 {
+                    // ReminderTable priority 수정
                 }
             }
         )

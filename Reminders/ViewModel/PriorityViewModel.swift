@@ -19,12 +19,20 @@ enum Priority: Int {
         case .low: return "낮음"
         }
     }
+    
+    static func fromString(_ string: String) -> Priority {
+        switch string {
+        case "높음": return .high
+        case "낮음": return .low
+        default: return .medium
+        }
+    }
 }
 
 class PriorityViewModel {
     var inputPriorityTag: Observable<Priority> = Observable(.medium)
-    var outputPriorityTag:Observable<String> = Observable("")
-
+    var outputPriorityTag: Observable<String> = Observable("")
+    
     init() {
         print("ViewModel Init")
         inputPriorityTag.bind { [weak self] _ in
@@ -33,13 +41,9 @@ class PriorityViewModel {
     }
     
     private func validation() {
-
         let priority = inputPriorityTag.value
-        
-        // inputPriorityTag의 값을 기반으로 outputPriorityTag 업데이트
         outputPriorityTag.value = priority.description
         
-        // 여기에서 추가 로직 처리
         switch priority {
         case .high:
             print("높은 우선순위 작업")
@@ -48,6 +52,5 @@ class PriorityViewModel {
         case .low:
             print("낮은 우선순위 작업")
         }
-    }    
+    }
 }
-

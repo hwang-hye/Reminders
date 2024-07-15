@@ -25,10 +25,10 @@ final class DataRepository {
         do {
             try realm.write {
                 realm.add(data)
-                print("Realm Create Succeed")
+                print("Realm Create Succeed: \(data.title), Priority: \(data.priority)")
             }
         } catch {
-            print("Realm Error")
+            print("Realm Error: \(error)")
         }
     }
     
@@ -37,11 +37,9 @@ final class DataRepository {
         return Array(value)
     }
     
-    func deleteItem(_ data: ReminderTable) {
-        
-        try! realm.write {
-            realm.delete(data)
-            print("Realm Delete Succeed")
+    func deleteItem(_ reminder: ReminderTable) {
+        try? realm.write {
+            realm.delete(reminder)
         }
     }
     
@@ -72,63 +70,85 @@ final class DataRepository {
     }
     
     func moveToCompleted(_ reminder: ReminderTable) {
-        // 이미 write 트랜잭션이 내부에 있다??
-        reminder.isCompleted = true
-        reminder.isFlagged = false  // 완료된 항목은 깃발 표시 해제
+        do {
+            try realm.write {
+                reminder.isCompleted = true
+                reminder.isFlagged = false  // 완료된 항목은 깃발 표시 해제
+                realm.add(reminder, update: .modified)
+            }
+        } catch {
+            print("Move to Completed Error: \(error)")
+        }
     }
+    
+    func toggleCheckBox(_ reminder: ReminderTable) {
+        try? realm.write {
+            reminder.isCompleted.toggle()
+            if reminder.isCompleted {
+                reminder.isFlagged = false
+            }
+        }
+    }
+    
+    func toggleFlag(_ reminder: ReminderTable) {
+        try? realm.write {
+            reminder.isFlagged.toggle()
+        }
+    }
+    
     
     // filterType에 따라 reminderList 업데이트
     func fetchData(_ filterType: FilterType) -> Results<ReminderTable> {
         switch filterType {
         case .today:
-            let today = Date()
-            let startOfDay = Calendar.current.startOfDay(for: today)
-            let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
-            let reminderList = realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", startOfDay, endOfDay).sorted(byKeyPath: "title", ascending: false)
-            updateFolderDetail(.today, reminderList)
-            return reminderList
-
+            let today = Calendar.current.startOfDay(for: Date())
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+            return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", today, tomorrow)
         case .upcoming:
             let today = Calendar.current.startOfDay(for: Date())
-            let reminderList = realm.objects(ReminderTable.self)
-                .filter("date > %@ AND isCompleted == false", today)
-                .sorted(byKeyPath: "date", ascending: true)
-            updateFolderDetail(.upcoming, reminderList)
-            return reminderList
+            return realm.objects(ReminderTable.self).filter("date > %@ AND isCompleted == false", today)
         case .all:
-            let reminderList = realm.objects(ReminderTable.self).filter("isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-            updateFolderDetail(.all, reminderList)
-            return reminderList
+            return realm.objects(ReminderTable.self).filter("isCompleted == false")
         case .flagged:
-            let reminderList = realm.objects(ReminderTable.self).filter("isFlagged == true AND isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-            updateFolderDetail(.flagged, reminderList)
-            return reminderList
+            return realm.objects(ReminderTable.self).filter("isFlagged == true")
         case .completed:
-            let reminderList = realm.objects(ReminderTable.self).filter("isCompleted == true").sorted(byKeyPath: "title", ascending: false)
-            updateFolderDetail(.completed, reminderList)
-            return reminderList
-//        case .none:
-//            let reminderList = realm.objects(ReminderTable.self).filter("isCompleted == false").sorted(byKeyPath: "title", ascending: false)
-        }
-    }
-    
-    // detail 조회(filter)
-    func updateFolderDetail(_ filterType: FilterType, _ results: Results<ReminderTable>) {
-        let folder = realm.objects(Folder.self).filter("filterType == %@", String(describing: filterType)).first
-        try! realm.write {
-            folder?.detail = results.reduce(List<ReminderTable>()) { list, element in
-                list.append(element)
-                return list
-            }
+            return realm.objects(ReminderTable.self).filter("isCompleted == true")
         }
     }
     
     func updateAllFolderDetail() {
-        fetchData(.all)
-        fetchData(.completed)
-        fetchData(.flagged)
-        fetchData(.today)
-        fetchData(.upcoming)
+        let filterTypes: [FilterType] = [.all, .completed, .flagged, .today, .upcoming]
+        for filterType in filterTypes {
+            do {
+                let results = try fetchData(filterType)
+                try realm.write {
+                    let folder = realm.objects(Folder.self).filter("filterType == %@", String(describing: filterType)).first
+                    folder?.detail = results.reduce(List<ReminderTable>()) { list, element in
+                        list.append(element)
+                        return list
+                    }
+                }
+            } catch {
+                print("Error updating folder detail for \(filterType): \(error)")
+            }
+        }
+    }
+    
+    func updateItem(_ reminder: ReminderTable) {
+        do {
+            try realm.write {
+                realm.add(reminder, update: .modified)
+                print("Realm Update Succeed: \(reminder.title), Priority: \(reminder.priority)")
+            }
+        } catch {
+            print("Realm Update Error: \(error)")
+        }
+    }
+    
+    func updatePriority(for reminder: ReminderTable, with priority: String) throws {
+        try realm.write {
+            reminder.priority = priority
+        }
     }
 }
 

@@ -68,7 +68,7 @@ class AddViewController: BaseViewController {
 
         let date = selectedDate
         let tag = selectedTag
-        let priority = selectedPriority
+        let priority = selectedPriority ?? "보통"  // 기본값 설정
         
         let data = ReminderTable(title: title, content: content, date: date, tag: tag, priority: priority)
         repository.createItem(data)
@@ -167,11 +167,12 @@ extension AddViewController: TagViewControllerDelegate {
 }
 
 extension AddViewController: PriorityViewControllerDelegate {
-    func didSelectPriority(_ priority: String) {
+    func didSelectPriority(_ priority: String, at indexPath: IndexPath?) {
         selectedPriority = priority
         tableView.reloadData()
     }
 }
+
 extension AddViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         print(#function)
@@ -238,12 +239,6 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.inputTextLabel.text = nil
             }
-//        case 3:
-//            if let image = selectedImage {
-//                cell.menuIcon.image = image
-//            } else {
-//                cell.menuIcon.image = UIImage(systemName: "camera")
-//            }
         default:
             cell.inputTextLabel.text = nil
         }

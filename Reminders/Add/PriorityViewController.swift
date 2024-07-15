@@ -10,7 +10,7 @@ import SnapKit
 
 
 protocol PriorityViewControllerDelegate: AnyObject {
-    func didSelectPriority(_ priority: String)
+    func didSelectPriority(_ priority: String, at indexPath: IndexPath?)
 }
 
 class PriorityViewController: BaseViewController {
@@ -21,6 +21,7 @@ class PriorityViewController: BaseViewController {
         return control
     }()
     
+    var indexPath: IndexPath?
     weak var delegate: PriorityViewControllerDelegate?
     
     let viewModel = PriorityViewModel()
@@ -65,18 +66,15 @@ class PriorityViewController: BaseViewController {
     @objc func backButtonClicked() {
         if segmentedController.selectedSegmentIndex != UISegmentedControl.noSegment {
             let selectedPriority = Priority(rawValue: segmentedController.selectedSegmentIndex) ?? .medium
-            viewModel.inputPriorityTag.value = selectedPriority
-            
             let selectedPriorityString = selectedPriority.description
             
             print("선택된 우선순위: \(selectedPriorityString)")
-            delegate?.didSelectPriority(selectedPriorityString)
+            delegate?.didSelectPriority(selectedPriorityString, at: indexPath)
         } else {
             print("우선순위가 선택되지 않음")
-            delegate?.didSelectPriority("")
+            delegate?.didSelectPriority("보통", at: indexPath)
         }
         
         navigationController?.popViewController(animated: true)
-        
     }
 }

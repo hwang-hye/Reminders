@@ -12,34 +12,29 @@ import SnapKit
 class ReminderListViewController: BaseViewController, PriorityViewControllerDelegate, ListTableViewCellDelegate {
     
     let reminderListTableView = UITableView()
-    var reminderList: Results<ReminderTable>?
-    var filterType: FilterType?
-    let repository = DataRepository()
-    let realm = try! Realm()
-    
+    let viewModel = ReminderListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print(#function)
-        fetchData()
+        setupBindings()
+        viewModel.fetchReminders()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print(#function)
-        fetchData()
+        viewModel.fetchReminders()
     }
     
     override func configureHierarchy() {
         view.addSubview(reminderListTableView)
     }
-    
     override func configureLayout() {
         reminderListTableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
-    
     override func configureView() {
         super.configureView()
         reminderListTableView.backgroundColor = .black
@@ -48,192 +43,99 @@ class ReminderListViewController: BaseViewController, PriorityViewControllerDele
         reminderListTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
     }
     
-    private func fetchData() {
-        // filterType에 따라 reminderList 업데이트
-        reminderList = repository.fetchData(filterType!)
-        repository.updateAllFolderDetail()
-        // UI 업데이트
-        self.reminderListTableView.reloadData()
-    }
-    
-    private func deleteReminder(at indexPath: IndexPath) {
-        guard let reminder = reminderList?[indexPath.row] else { return }
-        
-        let reminderId = reminder.id
-        
-        do {
-            try realm.write {
-                realm.delete(reminder)
+    private func setupBindings() {
+        viewModel.reminderList.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.reminderListTableView.reloadData()
             }
-            removeImageFromDocument(filename: "\(reminderId)")
-            fetchData()
-        } catch {
-            print("Error deleting reminder: \(error)")
-        }
-    }
-    
-    // flagReminder 메서드 수정
-    private func flagReminder(at indexPath: IndexPath) {
-        guard let reminder = reminderList?[indexPath.row] else { return }
-        
-        do {
-            try realm.write {
-                reminder.isFlagged.toggle() // isFlagged 상태를 토글
-            }
-            fetchData() // 데이터를 새로고침하여 UI 업데이트
-        } catch {
-            print("Error flagging reminder: \(error)")
-        }
-    }
-    
-    
-    func didSelectPriority(_ priority: String) {
-        guard let selectedIndexPath = reminderListTableView.indexPathForSelectedRow,
-              let reminder = reminderList?[selectedIndexPath.row] else {
-            return
         }
         
-        do {
-            try realm.write {
-                reminder.priority = priority
+        viewModel.error.bind { [weak self] error in
+            if let error = error {
+                self?.showError(error)
             }
-            reminderListTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-        } catch {
-            print("Error updating reminder priority: \(error)")
         }
     }
     
+    func setFilterType(_ filterType: FilterType) {
+        viewModel.filterType = filterType
+    }
+    
+    private func showError(_ error: String) {
+        let alert = UIAlertController(title: "오류", message: error, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
     
     func showPriorityViewController(for indexPath: IndexPath) {
         let priorityVC = PriorityViewController()
         priorityVC.delegate = self
-        if let reminder = reminderList?[indexPath.row] {
-            if let priorityInt = Int(reminder.priority ?? "보통") {
-                priorityVC.viewModel.inputPriorityTag.value = Priority(rawValue: priorityInt) ?? .medium
-            } else {
-                priorityVC.viewModel.inputPriorityTag.value = .medium
-            }
-        }
+        let reminder = viewModel.reminderList.value[indexPath.row]
+        let priorityValue = Priority.fromString(reminder.priority)
+        priorityVC.viewModel.inputPriorityTag.value = priorityValue
+        priorityVC.indexPath = indexPath  // 인덱스 패스를 전달
         navigationController?.pushViewController(priorityVC, animated: true)
     }
     
+    func didSelectPriority(_ priority: String, at indexPath: IndexPath?) {
+        guard let indexPath = indexPath else { return }
+        viewModel.updatePriority(priority, at: indexPath.row)
+    }
+    
+    private func deleteReminder(at indexPath: IndexPath) {
+        viewModel.deleteReminder(at: indexPath.row)
+    }
+    
+    // flagReminder 메서드 수정
+    private func flagReminder(at indexPath: IndexPath) {
+        viewModel.toggleFlag(at: indexPath.row)
+    }
+    
+    
     func didToggleCheckBox(at indexPath: IndexPath, isCompleted: Bool) {
-        guard let reminder = reminderList?[indexPath.row] else { return }
-        
-        do {
-            realm.beginWrite()
-            
-            reminder.isCompleted = isCompleted
-            
-            if isCompleted {
-                repository.moveToCompleted(reminder)
-            }
-            
-            try realm.commitWrite()
-            
-            if isCompleted {
-                // 데이터 소스 업데이트
-                fetchData()
-                
-                // UI 업데이트를 메인 스레드에서 수행
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    
-                    // 테이블 뷰 업데이트
-                    self.reminderListTableView.reloadData()
-                    
-                    // MainViewController의 카운트 업데이트
-                    NotificationCenter.default.post(name: NSNotification.Name("UpdateMainViewControllerCounts"), object: nil)
-                }
-            }
-        } catch {
-            print("Error updating reminder completion status: \(error)")
-        }
+        viewModel.toggleCheckBox(at: indexPath.row)
     }
 }
 
 extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return reminderList?.count ?? 0
+        return viewModel.reminderList.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
-        guard let data = reminderList?[indexPath.row] else { return cell }
-        
-        let image = loadImageToDocument(filename: "\(data.id)")
-        cell.configure(with: data, image: image, isCompletedCategory: filterType == .completed)
-        
+        let reminder = viewModel.reminderList.value[indexPath.row]
+        let image = loadImageToDocument(filename: "\(reminder.id)")
+        cell.configure(with: reminder, image: image, isCompletedCategory: viewModel.filterType == .completed)
         cell.indexPath = indexPath
         cell.delegate = self
-        cell.deleteAction = { [weak self] in
-            self?.deleteReminder(at: indexPath)
-        }
-        
+
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        
-//        let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
-//        guard (reminderList?[indexPath.row]) != nil else { return cell } // reminder 객체 가져오기
-//        guard let data = reminderList?[indexPath.row] else { return cell }
-//        cell.selectionStyle = .none
-//        cell.photoImage.image = loadImageToDocument(filename: "\(data.id)")
-//        cell.titleLabel.text = data.title
-//        cell.memoLabel.text = data.content
-//        cell.priorityLabel.text = data.priority
-//        
-//        cell.indexPath = indexPath
-//        cell.deleteAction = { [weak self] in
-//            self?.deleteReminder(at: indexPath)
-//        }
-//        
-//        if let date = data.date {
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "yyyy.MM.dd (E)"
-//            cell.dateLabel.text = dateFormatter.string(from: date)
-//        } else {
-//            cell.dateLabel.text = nil
-//        }
-//        cell.tagLabel.text = data.tag
-//        cell.checkBoxButton.isSelected = data.isCompleted // CheckBox의 상태를 isCompleted 값에 따라 설정
-//        
-//        // 체크박스 설정
-//        let isEnabled = filterType != .completed // 완료됨 카테고리가 아닐 때만 활성화
-//        cell.configureCheckBox(isCompleted: data.isCompleted, isEnabled: isEnabled)
-//        
-//        cell.delegate = self // Cell의 Delegate를 설정
-//        
-//        return cell
-//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if filterType != .completed {
+        if viewModel.filterType != .completed {
             showPriorityViewController(for: indexPath)
         }
         // 완료됨 카테고리에서는 아무 동작도 하지 않게 하기
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     // cell swipe 기능 처리
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completion) in
-            self?.deleteReminder(at: indexPath)
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+            self?.viewModel.deleteReminder(at: indexPath.row)
             completion(true)
         }
         
-        if filterType != .completed {
-            let flagAction = UIContextualAction(style: .normal, title: "Flag") { [weak self] (action, view, completion) in
-                self?.flagReminder(at: indexPath)
-                completion(true)
-            }
-            flagAction.backgroundColor = .systemYellow
-            
-            return UISwipeActionsConfiguration(actions: [deleteAction, flagAction])
-        } else {
-            // 완료됨 카테고리에서는 삭제 액션만 제공
-            return UISwipeActionsConfiguration(actions: [deleteAction])
+        let flagAction = UIContextualAction(style: .normal, title: "Flag") { [weak self] _, _, completion in
+            self?.viewModel.toggleFlag(at: indexPath.row)
+            completion(true)
         }
+        flagAction.backgroundColor = .systemYellow
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, flagAction])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

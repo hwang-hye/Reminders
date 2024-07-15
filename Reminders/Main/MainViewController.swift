@@ -171,21 +171,21 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         switch indexPath.item {
         case 0:
             print("오늘")
-            vc.filterType = .today
+            vc.setFilterType(.today)
         case 1:
             print("예정")
-            vc.filterType = .upcoming
+            vc.setFilterType(.upcoming)
         case 2:
             print("전체")
-            vc.filterType = .all
+            vc.setFilterType(.all)
         case 3:
             print("깃발 표시")
-            vc.filterType = .flagged
+            vc.setFilterType(.flagged)
         case 4:
             print("완료됨")
-            vc.filterType = .completed
+            vc.setFilterType(.completed)
         default:
-            vc.filterType = .all
+            vc.setFilterType(.all)
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }

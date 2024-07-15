@@ -24,13 +24,13 @@ class ReminderTable: Object {
     @Persisted var content: String?
     @Persisted var date: Date?
     @Persisted var tag: String?
-    @Persisted var priority: String?
+    @Persisted var priority: String = "보통"
     @Persisted var isFlagged: Bool = false
     @Persisted var isCompleted: Bool = false
     
     @Persisted(originProperty: "detail") var folderList: LinkingObjects<Folder>
     
-    convenience init(title: String, content: String?, date: Date?, tag: String?, priority: String?) {
+    convenience init(title: String, content: String?, date: Date?, tag: String?, priority: String = "보통") {
         self.init()
         self.title = title
         self.content = content
