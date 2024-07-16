@@ -222,7 +222,7 @@ extension AddViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             if let date = selectedDate {
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy.MM.DD (E)"
+                dateFormatter.dateFormat = "yyyy.MM.dd (E)"
                 cell.inputTextLabel.text = dateFormatter.string(from: date)
             } else {
                 cell.inputTextLabel.text = nil
