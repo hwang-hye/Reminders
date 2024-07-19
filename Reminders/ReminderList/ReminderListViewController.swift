@@ -103,12 +103,23 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
+//        let reminder = viewModel.reminderList.value[indexPath.row]
+//        let image = loadImageToDocument(filename: "\(reminder.id)")
+//        cell.configure(with: reminder, image: image, isCompletedCategory: viewModel.filterType == .completed)
+//        cell.indexPath = indexPath
+//        cell.delegate = self
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as! ListTableViewCell
         let reminder = viewModel.reminderList.value[indexPath.row]
         let image = loadImageToDocument(filename: "\(reminder.id)")
-        cell.configure(with: reminder, image: image, isCompletedCategory: viewModel.filterType == .completed)
+        let isCompletedCategory = viewModel.filterType == .completed
+        cell.configure(with: reminder, image: image, isCompletedCategory: isCompletedCategory)
         cell.indexPath = indexPath
         cell.delegate = self
+        
+        // 완료 항목에서는 체크박스 비활성화
+        cell.checkBoxButton.isEnabled = !isCompletedCategory
 
         return cell
     }
@@ -130,12 +141,20 @@ extension ReminderListViewController: UITableViewDelegate, UITableViewDataSource
         }
         
         let flagAction = UIContextualAction(style: .normal, title: "Flag") { [weak self] _, _, completion in
-            self?.viewModel.toggleFlag(at: indexPath.row)
+            guard let self = self else { return }
+            
+            self.viewModel.toggleFlag(at: indexPath.row)
+            
+            // UI 업데이트를 ViewModel에서 처리하도록 변경
             completion(true)
         }
         flagAction.backgroundColor = .systemYellow
         
-        return UISwipeActionsConfiguration(actions: [deleteAction, flagAction])
+        if viewModel.filterType == .completed {
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+        } else {
+            return UISwipeActionsConfiguration(actions: [deleteAction, flagAction])
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -13,6 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        setupDailyNotification()
+        UNUserNotificationCenter.current().delegate = self
+        return true
+        
+        scheduleReminderUpdate()
+        setupDailyUpdate()
         
         // Realm 데이터베이스 마이그레이션 설정
         let config = Realm.Configuration(
@@ -114,8 +120,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
     
+    func scheduleReminderUpdate() {
+        let calendar = Calendar.current
+        var dateComponents = DateComponents()
+        dateComponents.hour = 0
+        dateComponents.minute = 0
+        dateComponents.second = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: "com.yourapp.dailyUpdate", content: UNNotificationContent(), trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Error scheduling notification: \(error)")
+            }
+        }
+    }
+    
+    func setupDailyUpdate() {
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.sound = .none
+        
+        var dateComponents = DateComponents()
+        dateComponents.hour = 0
+        dateComponents.minute = 0
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: "dailyUpdate", content: content, trigger: trigger)
+        
+        center.add(request) { (error) in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            }
+        }
+        
+        center.delegate = self
+    }
+    
+    func setupDailyNotification() {
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.sound = .none
+
+        var dateComponents = DateComponents()
+        dateComponents.hour = 0
+        dateComponents.minute = 0
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: "dailyUpdate", content: content, trigger: trigger)
+
+        center.add(request) { (error) in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            }
+        }
+    }
     
     // MARK: UISceneSession Lifecycle
     
@@ -132,5 +194,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandledr completionHandler: @escaping () -> Void) {
+        if response.notification.request.identifier == "dailyUpdate" {
+            NotificationCenter.default.post(name: NSNotification.Name("DateChanged"), object: nil)
+        }
+        completionHandler()
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([])  // 알림을 표시하지 않음
+    }
 }
 

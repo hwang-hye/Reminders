@@ -10,7 +10,7 @@ import RealmSwift
 
 final class DataRepository {
     
-    private let realm = try! Realm()
+     private let realm = try! Realm()
     
     func detectRealmURL() {
         print(realm.configuration.fileURL ?? "")
@@ -21,10 +21,29 @@ final class DataRepository {
         return Array(value)
     }
     
+    //    func createItem(_ data: ReminderTable) {
+    //        do {
+    //            try realm.write {
+    //                realm.add(data)
+    //                print("Realm Create Succeed: \(data.title), Priority: \(data.priority)")
+    //            }
+    //        } catch {
+    //            print("Realm Error: \(error)")
+    //        }
+    //    }
+    
     func createItem(_ data: ReminderTable) {
         do {
             try realm.write {
                 realm.add(data)
+                
+                let folders = realm.objects(Folder.self)
+                for folder in folders {
+                    if shouldBeInFolder(reminder: data, folderType: folder.filterType) {
+                        folder.detail.append(data)
+                    }
+                }
+                
                 print("Realm Create Succeed: \(data.title), Priority: \(data.priority)")
             }
         } catch {
@@ -96,21 +115,59 @@ final class DataRepository {
         }
     }
     
+    private func shouldBeInFolder(reminder: ReminderTable, folderType: String) -> Bool {
+        let today = Calendar.current.startOfDay(for: Date())
+        switch folderType {
+        case "today":
+            guard let reminderDate = reminder.date else { return false }
+            return Calendar.current.isDate(reminderDate, inSameDayAs: today)
+        case "upcoming":
+            guard let reminderDate = reminder.date else { return false }
+            return reminderDate > today
+        case "all":
+            return !reminder.isCompleted
+        case "flagged":
+            return reminder.isFlagged && !reminder.isCompleted
+        case "completed":
+            return reminder.isCompleted
+        default:
+            return false
+        }
+    }
+    
     
     // filterType에 따라 reminderList 업데이트
+    //    func fetchData(_ filterType: FilterType) -> Results<ReminderTable> {
+    //        switch filterType {
+    //        case .today:
+    //            let today = Calendar.current.startOfDay(for: Date())
+    //            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+    //            return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", today, tomorrow)
+    //        case .upcoming:
+    //            let today = Calendar.current.startOfDay(for: Date())
+    //            return realm.objects(ReminderTable.self).filter("date > %@ AND isCompleted == false", today)
+    //        case .all:
+    //            return realm.objects(ReminderTable.self).filter("isCompleted == false")
+    //        case .flagged:
+    //            return realm.objects(ReminderTable.self).filter("isFlagged == true")
+    //        case .completed:
+    //            return realm.objects(ReminderTable.self).filter("isCompleted == true")
+    //        }
+    //    }
+    
     func fetchData(_ filterType: FilterType) -> Results<ReminderTable> {
+        let today = Calendar.current.startOfDay(for: Date())
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+        
         switch filterType {
         case .today:
-            let today = Calendar.current.startOfDay(for: Date())
-            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
             return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", today, tomorrow)
         case .upcoming:
-            let today = Calendar.current.startOfDay(for: Date())
-            return realm.objects(ReminderTable.self).filter("date > %@ AND isCompleted == false", today)
+            return realm.objects(ReminderTable.self).filter("date >= %@ AND isCompleted == false", tomorrow)
         case .all:
             return realm.objects(ReminderTable.self).filter("isCompleted == false")
         case .flagged:
-            return realm.objects(ReminderTable.self).filter("isFlagged == true")
+            return realm.objects(ReminderTable.self).filter("isFlagged == true AND isCompleted == false")
         case .completed:
             return realm.objects(ReminderTable.self).filter("isCompleted == true")
         }
@@ -134,20 +191,62 @@ final class DataRepository {
         }
     }
     
+//    func updateItem(_ reminder: ReminderTable) {
+//        do {
+//            try realm.write {
+//                realm.add(reminder, update: .modified)
+//                print("Realm Update Succeed: \(reminder.title), Priority: \(reminder.priority)")
+//            }
+//        } catch {
+//            print("Realm Update Error: \(error)")
+//        }
+//    }
+    
     func updateItem(_ reminder: ReminderTable) {
-        do {
-            try realm.write {
-                realm.add(reminder, update: .modified)
-                print("Realm Update Succeed: \(reminder.title), Priority: \(reminder.priority)")
-            }
-        } catch {
-            print("Realm Update Error: \(error)")
+        try? realm.write {
+            realm.add(reminder, update: .modified)
         }
     }
     
     func updatePriority(for reminder: ReminderTable, with priority: String) throws {
         try realm.write {
             reminder.priority = priority
+        }
+    }
+    
+    func moveExpiredRemindersToUpcoming() {
+        let today = Calendar.current.startOfDay(for: Date())
+        let expiredReminders = realm.objects(ReminderTable.self).filter("date < %@ AND isCompleted == false", today)
+        
+        try? realm.write {
+            for reminder in expiredReminders {
+                if let todayFolder = realm.objects(Folder.self).filter("filterType == 'today'").first,
+                   let upcomingFolder = realm.objects(Folder.self).filter("filterType == 'upcoming'").first {
+                    if let index = todayFolder.detail.index(of: reminder) {
+                        todayFolder.detail.remove(at: index)
+                    }
+                    upcomingFolder.detail.append(reminder)
+                }
+            }
+        }
+    }
+    
+    func unflagReminder(_ reminder: ReminderTable) {
+        try? realm.write {
+            reminder.isFlagged = false
+            
+            let today = Calendar.current.startOfDay(for: Date())
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+            
+            if reminder.date ?? Date() >= today && reminder.date ?? Date() < tomorrow {
+                if let todayFolder = realm.objects(Folder.self).filter("filterType == 'today'").first {
+                    todayFolder.detail.append(reminder)
+                }
+            } else if reminder.date ?? Date() >= tomorrow {
+                if let upcomingFolder = realm.objects(Folder.self).filter("filterType == 'upcoming'").first {
+                    upcomingFolder.detail.append(reminder)
+                }
+            }
         }
     }
 }

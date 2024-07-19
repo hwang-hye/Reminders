@@ -22,12 +22,19 @@ class ReminderListViewModel {
         self.repository = repository
     }
     
+//    func fetchReminders() {
+//        guard let filterType = filterType else {
+//            error.value = "filterType 지정 안됨"
+//            return
+//        }
+//        
+//        let results = repository.fetchData(filterType)
+//        reminderList.value = Array(results)
+//    }
+    
+    
     func fetchReminders() {
-        guard let filterType = filterType else {
-            error.value = "filterType 지정 안됨"
-            return
-        }
-        
+        guard let filterType = filterType else { return }
         let results = repository.fetchData(filterType)
         reminderList.value = Array(results)
     }
@@ -39,13 +46,21 @@ class ReminderListViewModel {
         fetchReminders()
     }
     
+//    func toggleFlag(at index: Int) {
+//        guard index < reminderList.value.count else { return }
+//        let reminder = reminderList.value[index]
+//        repository.toggleFlag(reminder)
+//        fetchReminders()
+//    }
+    
     func toggleFlag(at index: Int) {
         guard index < reminderList.value.count else { return }
         let reminder = reminderList.value[index]
         repository.toggleFlag(reminder)
-        fetchReminders()
+        fetchReminders() // 데이터를 다시 불러와 UI를 업데이트합니다.
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateMainViewControllerCounts"), object: nil)
     }
-    
+
     func toggleCheckBox(at index: Int) {
         guard index < reminderList.value.count else { return }
         let reminder = reminderList.value[index]
