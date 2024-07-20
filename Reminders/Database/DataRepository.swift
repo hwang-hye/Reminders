@@ -10,7 +10,7 @@ import RealmSwift
 
 final class DataRepository {
     
-     private let realm = try! Realm()
+    private let realm = try! Realm()
     
     func detectRealmURL() {
         print(realm.configuration.fileURL ?? "")
@@ -62,17 +62,39 @@ final class DataRepository {
         }
     }
     
+    //    func fetchTodayCount() -> Int {
+    //        let today = Date()
+    //        let startOfDay = Calendar.current.startOfDay(for: today)
+    //        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+    //        return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", startOfDay, endOfDay).count
+    //    }
+    //    
+    //    func fetchUpcomingCount() -> Int {
+    //        let today = Calendar.current.startOfDay(for: Date())
+    //        return realm.objects(ReminderTable.self)
+    //            .filter("date > %@ AND isCompleted == false", today)
+    //            .count
+    //    }
+    
     func fetchTodayCount() -> Int {
-        let today = Date()
-        let startOfDay = Calendar.current.startOfDay(for: today)
-        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
-        return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", startOfDay, endOfDay).count
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        let endOfToday = calendar.date(byAdding: .second, value: -1, to: tomorrow)!
+        
+        return realm.objects(ReminderTable.self)
+            .filter("date >= %@ AND date <= %@ AND isCompleted == false", today, endOfToday)
+            .count
     }
     
     func fetchUpcomingCount() -> Int {
-        let today = Calendar.current.startOfDay(for: Date())
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        let endOfToday = calendar.date(byAdding: .second, value: -1, to: tomorrow)!
+        
         return realm.objects(ReminderTable.self)
-            .filter("date > %@ AND isCompleted == false", today)
+            .filter("date > %@ AND isCompleted == false", endOfToday)
             .count
     }
     
@@ -156,20 +178,27 @@ final class DataRepository {
     //    }
     
     func fetchData(_ filterType: FilterType) -> Results<ReminderTable> {
-        let today = Calendar.current.startOfDay(for: Date())
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
+        let endOfToday = calendar.date(byAdding: .second, value: -1, to: tomorrow)!
         
         switch filterType {
         case .today:
-            return realm.objects(ReminderTable.self).filter("date >= %@ AND date < %@ AND isCompleted == false", today, tomorrow)
+            return realm.objects(ReminderTable.self)
+                .filter("date >= %@ AND date <= %@ AND isCompleted == false", today, endOfToday)
         case .upcoming:
-            return realm.objects(ReminderTable.self).filter("date >= %@ AND isCompleted == false", tomorrow)
+            return realm.objects(ReminderTable.self)
+                .filter("date > %@ AND isCompleted == false", endOfToday)
         case .all:
-            return realm.objects(ReminderTable.self).filter("isCompleted == false")
+            return realm.objects(ReminderTable.self)
+                .filter("isCompleted == false")
         case .flagged:
-            return realm.objects(ReminderTable.self).filter("isFlagged == true AND isCompleted == false")
+            return realm.objects(ReminderTable.self)
+                .filter("isFlagged == true AND isCompleted == false")
         case .completed:
-            return realm.objects(ReminderTable.self).filter("isCompleted == true")
+            return realm.objects(ReminderTable.self)
+                .filter("isCompleted == true")
         }
     }
     
@@ -191,16 +220,16 @@ final class DataRepository {
         }
     }
     
-//    func updateItem(_ reminder: ReminderTable) {
-//        do {
-//            try realm.write {
-//                realm.add(reminder, update: .modified)
-//                print("Realm Update Succeed: \(reminder.title), Priority: \(reminder.priority)")
-//            }
-//        } catch {
-//            print("Realm Update Error: \(error)")
-//        }
-//    }
+    //    func updateItem(_ reminder: ReminderTable) {
+    //        do {
+    //            try realm.write {
+    //                realm.add(reminder, update: .modified)
+    //                print("Realm Update Succeed: \(reminder.title), Priority: \(reminder.priority)")
+    //            }
+    //        } catch {
+    //            print("Realm Update Error: \(error)")
+    //        }
+    //    }
     
     func updateItem(_ reminder: ReminderTable) {
         try? realm.write {
